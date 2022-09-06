@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Felipe Libardi Gonçalves",
+  "classifications": ["WebAPI", "DDD", "CQRS", "MediatR", "SpecPattern"],
+  "identity": "TemplateBase",
+  "name": "Template base do Libardi",
+  "description": "Projeto base com DDD, CQRS, MediatR e Specification Pattern.",
+  "shortName": "template-base-libardi",
+  "sourceName": "TemplateBase",
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "preferNameDirectory": true,
+  "symbols": {
+    "EnableSwaggerSupport": {
+      "displayName": "Incluir o suporte ao Swagger",
+      "type": "parameter",
+      "description": "O Swagger pode ser utilizado tanto como UI da API, quanto para fazer a documentação da mesma.",
+      "datatype": "bool",
+      "defaultValue": "true"
+    },
+    "LaunchBrowserWhenRunning": {
+      "displayName": "Abrir o navegador ao iniciar a API",
+      "type": "parameter",
+      "description": "Recomenda-se o uso dessa funcionalidade caso o Swagger esteja incluído.",
+      "datatype": "bool",
+      "defaultValue": "true"
+    },
+    "UseNullable": {
+      "displayName": "Permitir variáveis nullable",
+      "type": "parameter",
+      "description": "Permite que variáveis sejam declaradas como um valor nulo.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "displayName": "Ativado",
+          "choice": "enable"
+        },
+        {
+          "displayName": "Desativado",
+          "choice": "disable"
+        }
+      ],
+      "defaultValue": "enable",
+      "replaces": "{Nullable}"
+    }
+  }
+}
