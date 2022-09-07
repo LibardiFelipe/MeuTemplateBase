@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TemplateBase.Application.Queries.Base;

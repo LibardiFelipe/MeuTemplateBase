@@ -32,6 +32,17 @@ namespace TemplateBase.WebAPI.Controllers
                 : BadRequest(result);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] string id)
+        {
+            var query = new PersonQuery(id);
+            var result = await _mediator.Send(query);
+
+            return result.Success
+                ? Ok(result)
+                : BadRequest(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreatePersonAsync([FromBody] CreatePersonRequest request)
         {

@@ -18,10 +18,7 @@ namespace TemplateBase.Application.Queries.Persons
 
         #region Construtores
         public PersonQuery() { }
-        public PersonQuery(string? id) : base(id)
-        {
-
-        }
+        public PersonQuery(string id) : base(id) { }
         #endregion
 
         #region Filtros

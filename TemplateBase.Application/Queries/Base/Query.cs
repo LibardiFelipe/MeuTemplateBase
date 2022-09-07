@@ -13,7 +13,7 @@ namespace TemplateBase.Application.Queries.Base
 
         public Query() { }
 
-        public Query(string? id = null)
+        public Query(string id)
         {
             if (Guid.TryParse(id, out var guidId) is false)
                 AddNotification("", DefaultMessages.Entidade_IdentificadorInvalido);
