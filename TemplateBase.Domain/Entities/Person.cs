@@ -1,6 +1,5 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using System;
 using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Domain.Enumerators;
 using TemplateBase.Domain.Resources;
@@ -12,12 +11,12 @@ namespace TemplateBase.Domain.Entities
      * ser utilizado em todo o projeto.
     */
 
-    public class Pessoa : Entity
+    public class Person : Entity
     {
         #region Construtores
-        public Pessoa() { }
+        public Person() { }
 
-        public Pessoa(string? name, string? surname, string? email, byte? age, EGeneroPessoa? genre, string? id = null) : base(id)
+        public Person(string? name, string? surname, string? email, byte? age, EPersonGenre? genre, string? id = null) : base(id)
         {
             // As propriedades já são passadas diretamente
             // para os métodos que as validam.
@@ -41,11 +40,11 @@ namespace TemplateBase.Domain.Entities
         public string? Surname { get; private set; }
         public string? Email { get; private set; }
         public byte? Age { get; private set; }
-        public EGeneroPessoa? Genre { get; private set; }
+        public EPersonGenre? Genre { get; private set; }
         #endregion
 
         #region Validações
-        public Pessoa ChangeName(string? value, bool fromConstructor = false)
+        public Person ChangeName(string? value, bool fromConstructor = false)
         {
             // Caso a função seja chamada de fora do construtor,
             // verifica se a propriedade que está sendo alterada é
@@ -67,7 +66,7 @@ namespace TemplateBase.Domain.Entities
             return this;
         }
 
-        public Pessoa ChangeSurname(string? value, bool fromConstructor = false)
+        public Person ChangeSurname(string? value, bool fromConstructor = false)
         {
             if (!fromConstructor && (Surname?.Equals(value) ?? false))
                 return this;
@@ -81,7 +80,7 @@ namespace TemplateBase.Domain.Entities
             return this;
         }
 
-        public Pessoa ChangeEmail(string? value, bool fromConstructor = false)
+        public Person ChangeEmail(string? value, bool fromConstructor = false)
         {
             if (!fromConstructor && (Email?.Equals(value) ?? false))
                 return this;
@@ -95,7 +94,7 @@ namespace TemplateBase.Domain.Entities
             return this;
         }
 
-        public Pessoa ChangeAge(byte? value, bool fromConstructor = false)
+        public Person ChangeAge(byte? value, bool fromConstructor = false)
         {
             if (!fromConstructor && (Age?.Equals(value) ?? false))
                 return this;
@@ -109,7 +108,7 @@ namespace TemplateBase.Domain.Entities
             return this;
         }
 
-        public Pessoa ChangeGenre(EGeneroPessoa? value, bool fromConstructor = false)
+        public Person ChangeGenre(EPersonGenre? value, bool fromConstructor = false)
         {
             if (!fromConstructor && (Genre?.Equals(value) ?? false))
                 return this;

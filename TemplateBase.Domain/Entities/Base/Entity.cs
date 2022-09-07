@@ -24,5 +24,6 @@ namespace TemplateBase.Domain.Entities.Base
         protected void SetNewCreatedAt(DateTime? newCreatedAt = null) => CreatedAt = newCreatedAt ?? DateTime.Now;
         public void SetNewUpdatedAt(DateTime? newUpdatedAt = null) => UpdatedAt = newUpdatedAt ?? DateTime.Now;
         protected void FlagAsChanged() => HasChanged = true;
+        public bool IsInvalid() => Notifications.Count > 0;
     }
 }

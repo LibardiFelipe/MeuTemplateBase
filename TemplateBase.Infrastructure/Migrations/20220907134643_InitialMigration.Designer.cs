@@ -11,7 +11,7 @@ using TemplateBase.Infrastructure.Persistence.Contexts;
 namespace TemplateBase.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220906233645_InitialMigration")]
+    [Migration("20220907134643_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,7 @@ namespace TemplateBase.Infrastructure.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Entity");
                 });
 
-            modelBuilder.Entity("TemplateBase.Domain.Entities.Pessoa", b =>
+            modelBuilder.Entity("TemplateBase.Domain.Entities.Person", b =>
                 {
                     b.HasBaseType("TemplateBase.Domain.Entities.Base.Entity");
 
@@ -61,7 +61,7 @@ namespace TemplateBase.Infrastructure.Migrations
                     b.Property<string>("Surname")
                         .HasColumnType("TEXT");
 
-                    b.HasDiscriminator().HasValue("Pessoa");
+                    b.HasDiscriminator().HasValue("Person");
                 });
 #pragma warning restore 612, 618
         }

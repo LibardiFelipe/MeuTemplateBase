@@ -70,11 +70,47 @@ namespace TemplateBase.Domain.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O Id inserido não é válido!.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O id inserido não é um guid válido!.
         /// </summary>
         public static string Entidade_IdentificadorInvalido {
             get {
                 return ResourceManager.GetString("Entidade_IdentificadorInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O comando foi executado com sucesso!.
+        /// </summary>
+        public static string Handler_ComandoExecutado {
+            get {
+                return ResourceManager.GetString("Handler_ComandoExecutado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O comando é inválido!.
+        /// </summary>
+        public static string Handler_ComandoInvalido {
+            get {
+                return ResourceManager.GetString("Handler_ComandoInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O comando não foi executado!.
+        /// </summary>
+        public static string Handler_FalhaAoExecutarComando {
+            get {
+                return ResourceManager.GetString("Handler_FalhaAoExecutarComando", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Um erro interno ocorreu durante a execução do serviço!.
+        /// </summary>
+        public static string Service_InternalError {
+            get {
+                return ResourceManager.GetString("Service_InternalError", resourceCulture);
             }
         }
     }

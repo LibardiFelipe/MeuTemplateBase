@@ -1,6 +1,6 @@
 ﻿namespace TemplateBase.Domain.Enumerators
 {
-    public enum EGeneroPessoa : byte
+    public enum EPersonGenre : byte
     {
         Masculino = 0,
         Feminino = 1,

@@ -5,9 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using TemplateBase.Application.Commands.Base;
 using TemplateBase.Application.Queries;
 using TemplateBase.Application.Queries.Base;
 using TemplateBase.Domain.Contracts;
+using TemplateBase.Domain.Services;
+using TemplateBase.Domain.Services.Contracts;
 using TemplateBase.Infrastructure.Persistence.Contexts;
 using TemplateBase.Infrastructure.UnitOfWork;
 
@@ -19,16 +22,18 @@ builder.Services.AddControllers();
 // DataContext
 builder.Services.AddDbContext<DataContext>(x
     => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new NullReferenceException("ConnectionString is null!")));
+    ?? throw new NullReferenceException("A ConnectionString não foi encontrada!")));
 
 // AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // MediatR
 builder.Services.AddMediatR(typeof(Query<>).Assembly, typeof(QueryHandler).Assembly);
+builder.Services.AddMediatR(typeof(Command).Assembly, typeof(CommandHandler).Assembly);
 
 // UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 
 //#if(EnableSwaggerSupport)
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

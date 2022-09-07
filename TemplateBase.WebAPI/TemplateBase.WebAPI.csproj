@@ -25,4 +25,8 @@
     <ProjectReference Include="..\TemplateBase.Application\TemplateBase.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\ViewModels\" />
+  </ItemGroup>
+
 </Project>

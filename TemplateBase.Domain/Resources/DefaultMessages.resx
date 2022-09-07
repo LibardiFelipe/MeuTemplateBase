@@ -121,6 +121,18 @@
     <value>O campo de {0} é obrigatório.</value>
   </data>
   <data name="Entidade_IdentificadorInvalido" xml:space="preserve">
-    <value>O Id inserido não é válido!</value>
+    <value>O id inserido não é um guid válido!</value>
+  </data>
+  <data name="Handler_ComandoExecutado" xml:space="preserve">
+    <value>O comando foi executado com sucesso!</value>
+  </data>
+  <data name="Handler_ComandoInvalido" xml:space="preserve">
+    <value>O comando é inválido!</value>
+  </data>
+  <data name="Handler_FalhaAoExecutarComando" xml:space="preserve">
+    <value>O comando não foi executado!</value>
+  </data>
+  <data name="Service_InternalError" xml:space="preserve">
+    <value>Um erro interno ocorreu durante a execução do serviço!</value>
   </data>
 </root>
