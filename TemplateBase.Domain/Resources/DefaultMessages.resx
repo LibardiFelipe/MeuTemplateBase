@@ -123,6 +123,9 @@
   <data name="Entidade_IdentificadorInvalido" xml:space="preserve">
     <value>O id inserido não é um guid válido!</value>
   </data>
+  <data name="Hander_FalhaAoExecutarQuery" xml:space="preserve">
+    <value>A query não foi executada!</value>
+  </data>
   <data name="Handler_ComandoExecutado" xml:space="preserve">
     <value>O comando foi executado com sucesso!</value>
   </data>
@@ -131,6 +134,12 @@
   </data>
   <data name="Handler_FalhaAoExecutarComando" xml:space="preserve">
     <value>O comando não foi executado!</value>
+  </data>
+  <data name="Handler_QueryExecutada" xml:space="preserve">
+    <value>A query foi executada com sucesso!</value>
+  </data>
+  <data name="Handler_QueryInvalida" xml:space="preserve">
+    <value>A query é inválida!</value>
   </data>
   <data name="Service_InternalError" xml:space="preserve">
     <value>Um erro interno ocorreu durante a execução do serviço!</value>

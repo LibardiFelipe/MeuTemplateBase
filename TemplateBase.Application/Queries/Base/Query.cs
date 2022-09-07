@@ -13,7 +13,7 @@ namespace TemplateBase.Application.Queries.Base
 
         public Query() { }
 
-        public Query(string id)
+        public Query(string? id = null)
         {
             if (Guid.TryParse(id, out var guidId) is false)
                 AddNotification("", DefaultMessages.Entidade_IdentificadorInvalido);
@@ -23,5 +23,6 @@ namespace TemplateBase.Application.Queries.Base
 
         public abstract ISpecification<TEntity> ToSpecification();
         public bool IsInvalid() => Notifications.Count > 0;
+        public abstract void Validate();
     }
 }

@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TemplateBase.Application.Commands.Persons;
+using TemplateBase.Application.Queries.Persons;
 using TemplateBase.WebAPI.Models.Requests.Persons;
 
 namespace TemplateBase.WebAPI.Controllers
@@ -18,6 +19,17 @@ namespace TemplateBase.WebAPI.Controllers
         {
             _mediator = mediator;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync([FromQuery] FilterPersonRequest request)
+        {
+            var query = _mapper.Map<PersonQuery>(request);
+            var result = await _mediator.Send(query);
+
+            return result.Success
+                ? Ok(result)
+                : BadRequest(result);
         }
 
         [HttpPost]

@@ -79,6 +79,15 @@ namespace TemplateBase.Domain.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A query não foi executada!.
+        /// </summary>
+        public static string Hander_FalhaAoExecutarQuery {
+            get {
+                return ResourceManager.GetString("Hander_FalhaAoExecutarQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O comando foi executado com sucesso!.
         /// </summary>
         public static string Handler_ComandoExecutado {
@@ -102,6 +111,24 @@ namespace TemplateBase.Domain.Resources {
         public static string Handler_FalhaAoExecutarComando {
             get {
                 return ResourceManager.GetString("Handler_FalhaAoExecutarComando", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A query foi executada com sucesso!.
+        /// </summary>
+        public static string Handler_QueryExecutada {
+            get {
+                return ResourceManager.GetString("Handler_QueryExecutada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A query é inválida!.
+        /// </summary>
+        public static string Handler_QueryInvalida {
+            get {
+                return ResourceManager.GetString("Handler_QueryInvalida", resourceCulture);
             }
         }
         

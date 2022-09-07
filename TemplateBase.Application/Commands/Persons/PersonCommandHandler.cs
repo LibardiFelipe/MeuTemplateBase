@@ -20,7 +20,7 @@ namespace TemplateBase.Application.Commands.Persons
         public async Task<CommandResult> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
             if (request.IsInvalid())
-                return new CommandResult(DefaultMessages.Handler_ComandoInvalido, false);
+                return new CommandResult(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
 
             var entity = await _personService.CreatePersonAsync(request.Name, request.Surname,
                 request.Email,request.Age, request.Genre, cancellationToken);
