@@ -1,5 +1,6 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
+using System;
 using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Domain.Enumerators;
 using TemplateBase.Domain.Resources;
@@ -11,22 +12,25 @@ namespace TemplateBase.Domain.Entities
      * ser utilizado em todo o projeto.
     */
 
-    public class Person : Entity
+    public class User : Entity
     {
         #region Construtores
-        public Person() { }
-
-        public Person(string? name, string? surname, string? email, byte? age, EPersonGenre? genre, string? id = null) : base(id)
+        public User() { }
+        public User(string? name, string? email, string? password, string? profilePictureUrl, DateTime? birthDate, string? id = null) : base(id)
         {
             // As propriedades já são passadas diretamente
             // para os métodos que as validam.
             // A propriedade id não necessita de uma validação aqui,
             // pois ela já ocorre dentro da classe base "Entity".
             ChangeName(name, true);
-            ChangeSurname(surname, true);
             ChangeEmail(email, true);
-            ChangeAge(age, true);
-            ChangeGenre(genre, true);
+            ChangePassword(password, true);
+            ChangeProfilePictureUrl(profilePictureUrl, true);
+            ChangeBirthDate(birthDate, true);
+
+            // Por padrão, a permissão do usuário começa como somente leitura,
+            // e passa para Read/Write após confirmar o email.
+            ChangePermission(EUserPermission.Read, true);
         }
         #endregion
 
@@ -37,14 +41,15 @@ namespace TemplateBase.Domain.Entities
          * obrigatoriedades através de validações no código.
         */
         public string? Name { get; private set; }
-        public string? Surname { get; private set; }
         public string? Email { get; private set; }
-        public byte? Age { get; private set; }
-        public EPersonGenre? Genre { get; private set; }
+        public string? Password { get; private set; }
+        public string? ProfilePictureUrl { get; private set; }
+        public DateTime? BirthDate { get; private set; }
+        public EUserPermission? Permission { get; private set; }
         #endregion
 
         #region Validações
-        public Person ChangeName(string? value, bool fromConstructor = false)
+        public User ChangeName(string? value, bool fromConstructor = false)
         {
             // Caso a função seja chamada de fora do construtor,
             // verifica se a propriedade que está sendo alterada é
@@ -57,7 +62,6 @@ namespace TemplateBase.Domain.Entities
                 .Requires()
                 .IsNotNullOrWhiteSpace(Name, "Name", string.Format(DefaultMessages.CampoObrigatorio, "Nome")));
 
-
             // Por padrão, o repositório só salva no banco entidades
             // que tenham tido alguma alteração.
             // Essa função é responsável por marcar a entidade com
@@ -66,21 +70,7 @@ namespace TemplateBase.Domain.Entities
             return this;
         }
 
-        public Person ChangeSurname(string? value, bool fromConstructor = false)
-        {
-            if (!fromConstructor && (Surname?.Equals(value) ?? false))
-                return this;
-
-            Surname = value;
-            AddNotifications(new Contract<Notification>()
-                .Requires()
-                .IsNotNullOrWhiteSpace(Surname, "Surname", string.Format(DefaultMessages.CampoObrigatorio, "Sobrenome")));
-
-            FlagAsChanged();
-            return this;
-        }
-
-        public Person ChangeEmail(string? value, bool fromConstructor = false)
+        public User ChangeEmail(string? value, bool fromConstructor = false)
         {
             if (!fromConstructor && (Email?.Equals(value) ?? false))
                 return this;
@@ -88,35 +78,64 @@ namespace TemplateBase.Domain.Entities
             Email = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNullOrWhiteSpace(Email, "Email", string.Format(DefaultMessages.CampoObrigatorio, "Email")));
+                .IsEmail(Email, "Email", string.Format(DefaultMessages.CampoInvalido, "Email")));
 
             FlagAsChanged();
             return this;
         }
 
-        public Person ChangeAge(byte? value, bool fromConstructor = false)
+        public User ChangePassword(string? value, bool fromConstructor = false)
         {
-            if (!fromConstructor && (Age?.Equals(value) ?? false))
+            if (!fromConstructor && (Password?.Equals(value) ?? false))
                 return this;
 
-            Age = value;
+            Password = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNull(Age, "Age", string.Format(DefaultMessages.CampoObrigatorio, "Idade")));
+                .IsNotNullOrWhiteSpace(Password, "Password", string.Format(DefaultMessages.CampoObrigatorio, "Senha")));
 
             FlagAsChanged();
             return this;
         }
 
-        public Person ChangeGenre(EPersonGenre? value, bool fromConstructor = false)
+        public User ChangeProfilePictureUrl(string? value, bool fromConstructor = false)
         {
-            if (!fromConstructor && (Genre?.Equals(value) ?? false))
+            if (!fromConstructor && (ProfilePictureUrl?.Equals(value) ?? false))
                 return this;
 
-            Genre = value;
+            ProfilePictureUrl = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNull(Genre, "Genre", string.Format(DefaultMessages.CampoObrigatorio, "Gênero")));
+                .IsUrlOrEmpty(ProfilePictureUrl, "ProfilePicture", string.Format(DefaultMessages.CampoInvalido, "Foto")));
+
+            FlagAsChanged();
+            return this;
+        }
+
+        public User ChangePermission(EUserPermission? value, bool fromConstructor = false)
+        {
+            if (!fromConstructor && (Permission?.Equals(value) ?? false))
+                return this;
+
+            Permission = value;
+            AddNotifications(new Contract<Notification>()
+                .Requires()
+                .IsNotNull(Permission, "Permission", string.Format(DefaultMessages.CampoObrigatorio, "Permissão")));
+
+            FlagAsChanged();
+            return this;
+        }
+
+        public User ChangeBirthDate(DateTime? value, bool fromConstructor = false)
+        {
+            if (!fromConstructor && (BirthDate?.Equals(value) ?? false))
+                return this;
+
+            BirthDate = value?.Date;
+            AddNotifications(new Contract<Notification>()
+                .Requires()
+                .IsFalse(BirthDate is null
+                && BirthDate == default, "BirthDate", string.Format(DefaultMessages.CampoObrigatorio, "Data de Nascimento")));
 
             FlagAsChanged();
             return this;

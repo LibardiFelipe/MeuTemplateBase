@@ -1,16 +1,15 @@
 ﻿using MediatR;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TemplateBase.Application.Queries.Base;
-using TemplateBase.Application.Queries.Persons;
+using TemplateBase.Application.Queries.Users;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
 using TemplateBase.Domain.Resources;
 
 namespace TemplateBase.Application.Queries
 {
-    public class QueryHandler : IRequestHandler<PersonQuery, QueryResult>
+    public class QueryHandler : IRequestHandler<UserQuery, QueryResult>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -19,12 +18,12 @@ namespace TemplateBase.Application.Queries
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<QueryResult> Handle(PersonQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResult> Handle(UserQuery request, CancellationToken cancellationToken)
         {
             if (request.IsInvalid())
                 return new QueryResult(DefaultMessages.Handler_QueryInvalida, false, request.Notifications);
 
-            var repo = _unitOfWork.Repository<Person>();
+            var repo = _unitOfWork.Repository<User>();
             var spec = request.ToSpecification();
             var result = await repo!.GetAllAsync(spec, cancellationToken);
 

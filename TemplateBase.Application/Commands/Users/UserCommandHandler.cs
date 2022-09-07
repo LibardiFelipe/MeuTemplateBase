@@ -7,23 +7,23 @@ using TemplateBase.Domain.Services.Contracts;
 
 namespace TemplateBase.Application.Commands.Persons
 {
-    public class PersonCommandHandler : CommandHandler,
-        IRequestHandler<CreatePersonCommand, CommandResult>
+    public class UserCommandHandler : CommandHandler,
+        IRequestHandler<CreateUserCommand, CommandResult>
     {
-        private readonly IPersonService _personService;
+        private readonly IUserService _personService;
 
-        public PersonCommandHandler(IPersonService personService)
+        public UserCommandHandler(IUserService personService)
         {
             _personService = personService;
         }
 
-        public async Task<CommandResult> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             if (request.IsInvalid())
                 return new CommandResult(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
 
-            var entity = await _personService.CreatePersonAsync(request.Name, request.Surname,
-                request.Email,request.Age, request.Genre, cancellationToken);
+            var entity = await _personService.CreatePersonAsync(request.Name, request.Email,
+                request.Password, request.ProfilePictureUrl, request.BirthDate, cancellationToken);
 
             if (_personService.IsInvalid())
                 return new CommandResult(DefaultMessages.Handler_FalhaAoExecutarComando, false, _personService.GetNotifications());

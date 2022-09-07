@@ -61,6 +61,15 @@ namespace TemplateBase.Domain.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo de {0} está em um formato inválido!.
+        /// </summary>
+        public static string CampoInvalido {
+            get {
+                return ResourceManager.GetString("CampoInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O campo de {0} é obrigatório..
         /// </summary>
         public static string CampoObrigatorio {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TemplateBase.Application.Queries.Persons;
+using TemplateBase.Application.Queries.Users;
 using TemplateBase.WebAPI.Models.Requests.Persons;
 
 namespace TemplateBase.WebAPI.AutoMapper
@@ -8,15 +8,14 @@ namespace TemplateBase.WebAPI.AutoMapper
     {
         public RequestsToQueries()
         {
-            CreateMap<FilterPersonRequest, PersonQuery>()
+            CreateMap<FilterUserRequest, UserQuery>()
                 .ConstructUsing((src, ctx) =>
                 {
-                    return new PersonQuery()
+                    return new UserQuery()
                     .FilterByName(src.Name)
-                    .FilterBySurname(src.Surname)
                     .FilterByEmail(src.Email)
-                    .FilterByAge(src.Age)
-                    .FilterByGenre(src.Genre);
+                    .FilterByPermission(src.Permission)
+                    .FilterByBirthDate(src.BirthDate);
                 });
         }
     }

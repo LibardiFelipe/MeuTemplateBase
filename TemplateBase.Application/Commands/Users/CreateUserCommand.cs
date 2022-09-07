@@ -1,15 +1,16 @@
-﻿using TemplateBase.Application.Commands.Base;
+﻿using System;
+using TemplateBase.Application.Commands.Base;
 using TemplateBase.Domain.Enumerators;
 
 namespace TemplateBase.Application.Commands.Persons
 {
-    public class CreatePersonCommand : Command
+    public class CreateUserCommand : Command
     {
         public string? Name { get; set; }
-        public string? Surname { get; set; }
         public string? Email { get; set; }
-        public byte? Age { get; set; }
-        public EPersonGenre? Genre { get; set; }
+        public string? Password { get; set; }
+        public string? ProfilePictureUrl { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public override void Validate()
         {

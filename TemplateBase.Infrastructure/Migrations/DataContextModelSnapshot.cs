@@ -17,14 +17,14 @@ namespace TemplateBase.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.8");
 
-            modelBuilder.Entity("TemplateBase.Domain.Entities.Person", b =>
+            modelBuilder.Entity("TemplateBase.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<byte?>("Age")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -32,13 +32,16 @@ namespace TemplateBase.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
-                    b.Property<byte?>("Genre")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Surname")
+                    b.Property<string>("Password")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte?>("Permission")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProfilePictureUrl")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -46,7 +49,7 @@ namespace TemplateBase.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pessoas");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

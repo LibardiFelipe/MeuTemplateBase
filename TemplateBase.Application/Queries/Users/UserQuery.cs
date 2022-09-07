@@ -1,62 +1,56 @@
-﻿using TemplateBase.Application.Queries.Base;
+﻿using System;
+using TemplateBase.Application.Queries.Base;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
 using TemplateBase.Domain.Enumerators;
 using TemplateBase.Domain.Specifications;
 
-namespace TemplateBase.Application.Queries.Persons
+namespace TemplateBase.Application.Queries.Users
 {
-    public class PersonQuery : Query<Person>
+    public class UserQuery : Query<User>
     {
         #region Membros privados
         private string? _name = null;
-        private string? _surname = null;
         private string? _email = null;
-        private byte? _age = null;
-        public EPersonGenre? _genre = null;
+        public EUserPermission? _permission = null;
+        public DateTime? _birthDate = null;
         #endregion
 
         #region Construtores
-        public PersonQuery() { }
-        public PersonQuery(string id) : base(id) { }
+        public UserQuery() { }
+        public UserQuery(string id) : base(id) { }
         #endregion
 
         #region Filtros
-        public PersonQuery FilterByName(string? value)
+        public UserQuery FilterByName(string? value)
         {
             _name = value;
             return this;
         }
 
-        public PersonQuery FilterBySurname(string? value)
-        {
-            _surname = value;
-            return this;
-        }
-
-        public PersonQuery FilterByEmail(string? value)
+        public UserQuery FilterByEmail(string? value)
         {
             _email = value;
             return this;
         }
 
-        public PersonQuery FilterByAge(byte? value)
+        public UserQuery FilterByPermission(EUserPermission? value)
         {
-            _age = value;
+            _permission = value;
             return this;
         }
 
-        public PersonQuery FilterByGenre(EPersonGenre? value)
+        public UserQuery FilterByBirthDate(DateTime? value)
         {
-            _genre = value;
+            _birthDate = value;
             return this;
         }
         #endregion
 
         #region Specification
-        public override ISpecification<Person> ToSpecification()
+        public override ISpecification<User> ToSpecification()
         {
-            var spec = new PersonSpec();
+            var spec = new UserSpec();
 
             if (_id.HasValue)
                 spec.FilterById(_id.Value);
@@ -64,17 +58,14 @@ namespace TemplateBase.Application.Queries.Persons
             if (!string.IsNullOrWhiteSpace(_name))
                 spec.FilterByName(_name);
 
-            if (!string.IsNullOrWhiteSpace(_surname))
-                spec.FilterBySurname(_surname);
-
             if (!string.IsNullOrWhiteSpace(_email))
                 spec.FilterByEmail(_email);
 
-            if (_age.HasValue)
-                spec.FilterByAge(_age.Value);
+            if (_permission.HasValue)
+                spec.FilterByPermission(_permission.Value);
 
-            if (_genre.HasValue)
-                spec.FilterByGenre(_genre.Value);
+            if (_birthDate.HasValue && _birthDate.Value != default)
+                spec.FilterByBirthDate(_birthDate.Value);
 
             return spec;
         }

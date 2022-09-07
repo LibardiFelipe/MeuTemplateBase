@@ -8,7 +8,7 @@ namespace TemplateBase.WebAPI.AutoMapper
     {
         public RequestsToCommands()
         {
-            CreateMap<CreatePersonRequest, CreatePersonCommand>()
+            CreateMap<CreateUserRequest, CreateUserCommand>()
                 .IncludeAllDerived()
                 .AfterMap((_, command) => command.Validate());
         }

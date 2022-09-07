@@ -9,7 +9,7 @@ namespace TemplateBase.Infrastructure.Persistence.Contexts
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<Person>? Pessoas { get; set; }
+        public DbSet<User>? Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
