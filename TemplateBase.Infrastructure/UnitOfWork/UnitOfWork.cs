@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TemplateBase.Domain.Contracts;
-using TemplateBase.Domain.Entities;
+using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Infrastructure.Persistence.Contexts;
 using TemplateBase.Infrastructure.Repository;
 

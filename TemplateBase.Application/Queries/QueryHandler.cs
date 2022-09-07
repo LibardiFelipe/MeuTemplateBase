@@ -1,7 +1,14 @@
-﻿namespace TemplateBase.Application.Queries
+﻿using TemplateBase.Domain.Contracts;
+
+namespace TemplateBase.Application.Queries
 {
     public class QueryHandler
     {
-        // TODO: Adicionar o uow
+        private readonly IUnitOfWork _unitOfWork;
+
+        public QueryHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
     }
 }

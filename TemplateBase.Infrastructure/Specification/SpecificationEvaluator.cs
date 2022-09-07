@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using TemplateBase.Domain.Contracts;
-using TemplateBase.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using TemplateBase.Domain.Entities.Base;
 
 namespace TemplateBase.Infrastructure.Specification
 {

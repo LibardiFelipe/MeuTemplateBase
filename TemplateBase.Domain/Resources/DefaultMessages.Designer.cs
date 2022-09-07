@@ -61,6 +61,15 @@ namespace TemplateBase.Domain.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo de {0} é obrigatório..
+        /// </summary>
+        public static string CampoObrigatorio {
+            get {
+                return ResourceManager.GetString("CampoObrigatorio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O Id inserido não é válido!.
         /// </summary>
         public static string Entidade_IdentificadorInvalido {

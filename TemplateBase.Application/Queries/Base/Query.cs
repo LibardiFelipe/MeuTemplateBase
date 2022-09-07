@@ -2,7 +2,7 @@
 using MediatR;
 using System;
 using TemplateBase.Domain.Contracts;
-using TemplateBase.Domain.Entities;
+using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Domain.Resources;
 
 namespace TemplateBase.Application.Queries.Base

@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using TemplateBase.Domain.Contracts;
-using TemplateBase.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using TemplateBase.Infrastructure.Specification;
 using TemplateBase.Infrastructure.Persistence.Contexts;
 using System.Threading;
+using TemplateBase.Domain.Entities.Base;
 
 namespace TemplateBase.Infrastructure.Repository
 {
@@ -32,16 +32,26 @@ namespace TemplateBase.Infrastructure.Repository
 
         public void Update(TEntity entity)
         {
+            if (entity.HasChanged is false)
+                return;
+
             entity.SetNewUpdatedAt();
             _dbSet.Update(entity);
         }
 
         public void UpdateRange(IEnumerable<TEntity> entities)
         {
+            var changed = new List<TEntity>();
             foreach (var entity in entities)
-                entity.SetNewUpdatedAt();
+            {
+                if (entity.HasChanged)
+                {
+                    entity.SetNewUpdatedAt();
+                    changed.Add(entity);
+                }
+            }
 
-            _dbSet.UpdateRange(entities);
+            _dbSet.UpdateRange(changed);
         }
 
         public void Delete(TEntity entity)

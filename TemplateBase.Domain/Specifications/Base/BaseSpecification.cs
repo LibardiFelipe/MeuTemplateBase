@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using TemplateBase.Domain.Contracts;
-using TemplateBase.Domain.Entities;
+using TemplateBase.Domain.Entities.Base;
 
 namespace TemplateBase.Domain.Specifications.Base
 {
