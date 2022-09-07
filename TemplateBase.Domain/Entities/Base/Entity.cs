@@ -8,10 +8,16 @@ namespace TemplateBase.Domain.Entities.Base
     {
         public Entity(string? id = null)
         {
-            if (Guid.TryParse(id, out var guidId) is false)
-                AddNotification("", DefaultMessages.Entidade_IdentificadorInvalido);
+            if (string.IsNullOrWhiteSpace(id))
+                Id = Guid.NewGuid();
+            else
+            {
+                if (Guid.TryParse(id, out var guidId) is false)
+                    AddNotification("", DefaultMessages.Entidade_IdentificadorInvalido);
 
-            Id = guidId == Guid.Empty ? Guid.NewGuid() : guidId;
+                Id = guidId;
+            }
+
             CreatedAt = DateTime.Now;
             HasChanged = false;
         }
