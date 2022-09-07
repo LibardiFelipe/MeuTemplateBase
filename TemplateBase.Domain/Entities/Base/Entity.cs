@@ -1,5 +1,6 @@
 ﻿using Flunt.Notifications;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using TemplateBase.Domain.Resources;
 
 namespace TemplateBase.Domain.Entities.Base
@@ -23,6 +24,7 @@ namespace TemplateBase.Domain.Entities.Base
         }
 
         public Guid Id { get; private set; }
+        [NotMapped]
         public bool HasChanged { get; private set; }
         public DateTime? CreatedAt { get; private set; }
         public DateTime? UpdatedAt { get; private set; }

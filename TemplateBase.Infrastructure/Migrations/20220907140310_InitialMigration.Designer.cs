@@ -11,7 +11,7 @@ using TemplateBase.Infrastructure.Persistence.Contexts;
 namespace TemplateBase.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220907134643_InitialMigration")]
+    [Migration("20220907140310_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,35 +19,17 @@ namespace TemplateBase.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.8");
 
-            modelBuilder.Entity("TemplateBase.Domain.Entities.Base.Entity", b =>
+            modelBuilder.Entity("TemplateBase.Domain.Entities.Person", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Entity");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Entity");
-                });
-
-            modelBuilder.Entity("TemplateBase.Domain.Entities.Person", b =>
-                {
-                    b.HasBaseType("TemplateBase.Domain.Entities.Base.Entity");
-
                     b.Property<byte?>("Age")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
@@ -61,7 +43,12 @@ namespace TemplateBase.Infrastructure.Migrations
                     b.Property<string>("Surname")
                         .HasColumnType("TEXT");
 
-                    b.HasDiscriminator().HasValue("Person");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pessoas");
                 });
 #pragma warning restore 612, 618
         }

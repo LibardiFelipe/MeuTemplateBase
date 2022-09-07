@@ -14,8 +14,6 @@ namespace TemplateBase.Infrastructure.Persistence.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<Notification>();
-            modelBuilder.Entity<Entity>(x => x.Ignore(x => x.HasChanged));
-            modelBuilder.Entity<Entity>(x => x.Ignore(x => x.Notifications));
         }
     }
 }
