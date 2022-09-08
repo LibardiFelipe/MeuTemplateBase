@@ -17,7 +17,13 @@ using TemplateBase.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddRouting(options =>
+{
+    // Gera as rotas em minúsculo
+    options.LowercaseUrls = true;
+});
+
+// Controllers
 builder.Services.AddControllers();
 
 // DataContext
