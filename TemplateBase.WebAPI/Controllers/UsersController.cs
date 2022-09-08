@@ -28,7 +28,7 @@ namespace TemplateBase.WebAPI.Controllers
             var result = await _mediator.Send(query);
 
             return result.Success
-                ? Ok(result)
+                ? Ok(result.Data)
                 : BadRequest(result);
         }
 
@@ -39,7 +39,7 @@ namespace TemplateBase.WebAPI.Controllers
             var result = await _mediator.Send(query);
 
             return result.Success
-                ? Ok(result)
+                ? Ok(result.Data)
                 : BadRequest(result);
         }
 
@@ -50,7 +50,7 @@ namespace TemplateBase.WebAPI.Controllers
             var result = await _mediator.Send(command);
 
             return result.Success
-                ? Ok(result)
+                ? Ok(result.Data)
                 : BadRequest(result);
         }
     }
