@@ -2,7 +2,7 @@
 {
     public class QueryResult
     {
-        public QueryResult(string message, bool success, object data)
+        public QueryResult(string message, bool success, object? data = null)
         {
             Message = message;
             Success = success;
@@ -11,6 +11,6 @@
 
         public string Message { get; private set; }
         public bool Success { get; private set; }
-        public object Data { get; private set; }
+        public object? Data { get; private set; }
     }
 }
