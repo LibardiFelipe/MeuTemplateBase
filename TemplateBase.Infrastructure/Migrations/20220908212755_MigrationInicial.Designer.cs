@@ -11,7 +11,7 @@ using TemplateBase.Infrastructure.Persistence.Contexts;
 namespace TemplateBase.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220907203631_MigrationInicial")]
+    [Migration("20220908212755_MigrationInicial")]
     partial class MigrationInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,7 +51,7 @@ namespace TemplateBase.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User", (string)null);
                 });
 #pragma warning restore 612, 618
         }
