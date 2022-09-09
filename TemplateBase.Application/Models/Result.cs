@@ -1,8 +1,8 @@
-﻿namespace TemplateBase.Application.Commands.Base
+﻿namespace TemplateBase.Application.Models
 {
-    public class CommandResult
+    public class Result
     {
-        public CommandResult(string message, bool success, object? data = null)
+        public Result(string message, bool success, object? data = null)
         {
             Message = message;
             Success = success;

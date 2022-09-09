@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using TemplateBase.Application.Queries.Base;
+using TemplateBase.Application.Models;
 using TemplateBase.Application.Queries.Users;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
@@ -9,7 +9,7 @@ using TemplateBase.Domain.Resources;
 
 namespace TemplateBase.Application.Queries
 {
-    public class QueryHandler : IRequestHandler<UserQuery, QueryResult>
+    public class QueryHandler : IRequestHandler<UserQuery, Result>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -18,16 +18,16 @@ namespace TemplateBase.Application.Queries
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<QueryResult> Handle(UserQuery request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UserQuery request, CancellationToken cancellationToken)
         {
             if (request.IsInvalid())
-                return new QueryResult(DefaultMessages.Handler_QueryInvalida, false, request.Notifications);
+                return new Result(DefaultMessages.Handler_QueryInvalida, false, request.Notifications);
 
             var repo = _unitOfWork.Repository<User>();
             var spec = request.ToSpecification();
             var result = await repo!.GetAllAsync(spec, cancellationToken);
 
-            return new QueryResult(DefaultMessages.Handler_QueryExecutada, true, result);
+            return new Result(DefaultMessages.Handler_QueryExecutada, true, result);
         }
     }
 }

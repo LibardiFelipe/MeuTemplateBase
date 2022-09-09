@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TemplateBase.Application.Commands.Persons;
 using TemplateBase.Application.Queries.Users;
+using TemplateBase.Domain.Entities;
 using TemplateBase.WebAPI.Models.Requests.Persons;
+using TemplateBase.WebAPI.Models.ViewModels;
 
 namespace TemplateBase.WebAPI.Controllers
 {
@@ -26,10 +28,11 @@ namespace TemplateBase.WebAPI.Controllers
         {
             var query = _mapper.Map<UserQuery>(request);
             var result = await _mediator.Send(query);
+            var response = _mapper.Map<ResultViewModel>(result);
 
-            return result.Success
-                ? Ok(result.Data)
-                : BadRequest(result);
+            return response.Success
+                ? Ok(response)
+                : BadRequest(response);
         }
 
         [HttpGet("{id}")]
@@ -37,10 +40,11 @@ namespace TemplateBase.WebAPI.Controllers
         {
             var query = new UserQuery(id);
             var result = await _mediator.Send(query);
+            var response = _mapper.Map<ResultViewModel>(result);
 
-            return result.Success
-                ? Ok(result.Data)
-                : BadRequest(result);
+            return response.Success
+                ? Ok(response)
+                : BadRequest(response);
         }
 
         [HttpPost]
@@ -48,10 +52,11 @@ namespace TemplateBase.WebAPI.Controllers
         {
             var command = _mapper.Map<CreateUserCommand>(request);
             var result = await _mediator.Send(command);
+            var response = _mapper.Map<ResultViewModel>(result);
 
-            return result.Success
-                ? Ok(result.Data)
-                : BadRequest(result);
+            return response.Success
+                ? Ok(response)
+                : BadRequest(response);
         }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using Flunt.Notifications;
 using MediatR;
 using System;
+using TemplateBase.Application.Models;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Domain.Resources;
 
 namespace TemplateBase.Application.Queries.Base
 {
-    public abstract class Query<TEntity> : Notifiable<Notification>, IRequest<QueryResult> where TEntity : Entity
+    public abstract class Query<TEntity> : Notifiable<Notification>, IRequest<Result> where TEntity : Entity
     {
         protected Guid? _id = null;
 
