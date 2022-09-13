@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>false</ImplicitUsings>
-    <Nullable>{Nullable}</Nullable>
+    <Nullable>true</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

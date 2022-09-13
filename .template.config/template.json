@@ -26,24 +26,6 @@
       "description": "Recomenda-se o uso dessa funcionalidade caso o Swagger esteja incluído.",
       "datatype": "bool",
       "defaultValue": "true"
-    },
-    "UseNullable": {
-      "displayName": "Permitir variáveis nullable",
-      "type": "parameter",
-      "description": "Permite que variáveis sejam declaradas como um valor nulo.",
-      "datatype": "choice",
-      "choices": [
-        {
-          "displayName": "Ativado",
-          "choice": "enable"
-        },
-        {
-          "displayName": "Desativado",
-          "choice": "disable"
-        }
-      ],
-      "defaultValue": "enable",
-      "replaces": "{Nullable}"
     }
   }
 }
