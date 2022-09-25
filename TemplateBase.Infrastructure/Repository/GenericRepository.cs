@@ -79,9 +79,9 @@ namespace TemplateBase.Infrastructure.Repository
             return SpecificationEvaluator<TEntity>.GetQuery(_dbSet.AsQueryable(), specification);
         }
 
-        public async Task<bool> ContainsIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> ContainsAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
         {
-            return await _dbSet.AnyAsync(x => x.Id == id, cancellationToken);
+            return await ApplySpecification(specification).AnyAsync(cancellationToken);
         }
     }
 }
