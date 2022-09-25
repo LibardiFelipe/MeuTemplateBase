@@ -1,11 +1,11 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Felipe Libardi Gonçalves",
-  "classifications": ["WebAPI", "DDD", "CQRS", "MediatR", "SpecPattern"],
+  "classifications": ["WebAPI", "DDD", "CQRS", "MediatR", "SpecPattern", "UOW"],
   "identity": "TemplateBase",
-  "name": "Template base do Libardi",
-  "description": "Projeto base com DDD, CQRS, MediatR e Specification Pattern.",
-  "shortName": "template-base-libardi",
+  "name": "Template Perfeito (Libardi)",
+  "description": "Projeto base com DDD, CQRS, MediatR, Specification Pattern e Unit of Work.",
+  "shortName": "template-perfeito",
   "sourceName": "TemplateBase",
   "tags": {
     "language": "C#",
