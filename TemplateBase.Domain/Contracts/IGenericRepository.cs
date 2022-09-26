@@ -9,7 +9,7 @@ namespace TemplateBase.Domain.Contracts
 {
     public interface IGenericRepository<TEntity> where TEntity : Entity
     {
-        Task<bool> ContainsIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<bool> ContainsAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken);
         Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken);
         Task AddAsync(TEntity entity, CancellationToken cancellationToken);

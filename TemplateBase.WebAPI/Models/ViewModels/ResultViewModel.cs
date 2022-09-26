@@ -6,6 +6,6 @@ namespace TemplateBase.WebAPI.Models.ViewModels
     {
         public bool Success { get; set; }
         public string? Message { get; set; }
-        public IEnumerable<object>? Data { get; set; }
+        public object? Data { get; set; }
     }
 }
