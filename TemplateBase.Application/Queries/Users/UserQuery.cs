@@ -12,8 +12,8 @@ namespace TemplateBase.Application.Queries.Users
         #region Membros privados
         private string _name;
         private string _email;
-        private EUserPermission _permission;
-        private DateTime _birthDate;
+        private EUserPermission? _permission = null;
+        private DateTime? _birthDate = null;
         #endregion
 
         #region Construtores
@@ -34,13 +34,13 @@ namespace TemplateBase.Application.Queries.Users
             return this;
         }
 
-        public UserQuery FilterByPermission(EUserPermission value)
+        public UserQuery FilterByPermission(EUserPermission? value)
         {
             _permission = value;
             return this;
         }
 
-        public UserQuery FilterByBirthDate(DateTime value)
+        public UserQuery FilterByBirthDate(DateTime? value)
         {
             _birthDate = value;
             return this;
@@ -61,11 +61,11 @@ namespace TemplateBase.Application.Queries.Users
             if (!string.IsNullOrWhiteSpace(_email))
                 spec.FilterByEmail(_email);
 
-            if (_permission > 0)
-                spec.FilterByPermission(_permission);
+            if (_permission.HasValue)
+                spec.FilterByPermission(_permission.Value);
 
-            if (_birthDate != default)
-                spec.FilterByBirthDate(_birthDate);
+            if (_birthDate.HasValue)
+                spec.FilterByBirthDate(_birthDate.Value);
 
             return spec;
         }
