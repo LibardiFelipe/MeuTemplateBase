@@ -12,8 +12,8 @@ namespace TemplateBase.Application.Queries.Users
         #region Membros privados
         private string _name;
         private string _email;
-        public EUserPermission _permission;
-        public DateTime _birthDate;
+        private EUserPermission _permission;
+        private DateTime _birthDate;
         #endregion
 
         #region Construtores
