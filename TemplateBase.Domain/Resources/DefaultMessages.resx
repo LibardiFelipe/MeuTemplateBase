@@ -123,6 +123,9 @@
   <data name="CampoObrigatorio" xml:space="preserve">
     <value>O campo de {0} é obrigatório.</value>
   </data>
+  <data name="EmailJaExistente" xml:space="preserve">
+    <value>O email informado já se encontra cadastrado.</value>
+  </data>
   <data name="Entidade_IdentificadorInvalido" xml:space="preserve">
     <value>O id inserido não é um guid válido!</value>
   </data>

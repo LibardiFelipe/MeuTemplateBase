@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
-using TemplateBase.Domain.Contracts;
-using Microsoft.EntityFrameworkCore;
-using TemplateBase.Infrastructure.Specification;
-using TemplateBase.Infrastructure.Persistence.Contexts;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading;
+using System.Threading.Tasks;
+using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities.Base;
+using TemplateBase.Infrastructure.Persistence.Contexts;
+using TemplateBase.Infrastructure.Specification;
 
 namespace TemplateBase.Infrastructure.Repository
 {
@@ -64,24 +64,24 @@ namespace TemplateBase.Infrastructure.Repository
             _dbSet.RemoveRange(entities);
         }
 
-        public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _dbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
         {
-            return await ApplySpecification(specification).ToListAsync(cancellationToken);
-        }
-
-        public IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> specification)
-        {
-            return SpecificationEvaluator<TEntity>.GetQuery(_dbSet.AsQueryable(), specification);
+            return await SpecificationEvaluator<TEntity>.ApplySpecification(_dbSet.AsQueryable(), specification).ToListAsync(cancellationToken);
         }
 
         public async Task<bool> ContainsAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
         {
-            return await ApplySpecification(specification).AnyAsync(cancellationToken);
+            return await SpecificationEvaluator<TEntity>.ApplySpecification(_dbSet.AsQueryable(), specification).AnyAsync(cancellationToken);
+        }
+
+        public async Task<bool> ContainsAsync(Expression<Func<TEntity, bool>> criteria, CancellationToken cancellationToken)
+        {
+            return await SpecificationEvaluator<TEntity>.ApplySpecification(_dbSet.AsQueryable(), criteria).AnyAsync(cancellationToken);
         }
     }
 }

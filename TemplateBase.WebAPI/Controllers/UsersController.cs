@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TemplateBase.Application.Commands.Persons;
 using TemplateBase.Application.Queries.Users;
-using TemplateBase.Domain.Entities;
 using TemplateBase.WebAPI.Models.Requests.Persons;
 using TemplateBase.WebAPI.Models.ViewModels;
 
@@ -48,7 +47,7 @@ namespace TemplateBase.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePersonAsync([FromBody] CreateUserRequest request)
+        public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequest request)
         {
             var command = _mapper.Map<CreateUserCommand>(request);
             var result = await _mediator.Send(command);

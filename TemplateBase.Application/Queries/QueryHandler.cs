@@ -25,7 +25,7 @@ namespace TemplateBase.Application.Queries
 
             var repo = _unitOfWork.Repository<User>();
             var spec = request.ToSpecification();
-            var result = await repo!.GetAllAsync(spec, cancellationToken);
+            var result = await repo.GetAllAsync(spec, cancellationToken);
 
             return new Result(DefaultMessages.Handler_QueryExecutada, true, result);
         }

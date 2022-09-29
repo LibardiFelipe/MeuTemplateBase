@@ -23,7 +23,7 @@ namespace TemplateBase.Application.Commands.Persons
             if (request.IsInvalid())
                 return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
 
-            var entity = await _personService.CreatePersonAsync(request.Name, request.Email,
+            var entity = await _personService.CreateUserAsync(request.Name, request.Email,
                 request.Password, request.ProfilePictureUrl, request.BirthDate, cancellationToken);
 
             if (_personService.IsInvalid())

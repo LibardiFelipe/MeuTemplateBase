@@ -13,25 +13,25 @@ namespace TemplateBase.Domain.Specifications
 
         public UserSpec FilterByName(string value)
         {
-            CriteriaAnd(x => x.Name != null && x.Name.ToLower().Contains(value.ToLower()));
+            CriteriaAnd(x => x.Name.ToLower().Contains(value.ToLower()));
             return this;
         }
 
         public UserSpec FilterByEmail(string value)
         {
-            CriteriaAnd(x => x.Email != null && x.Email.ToLower().Contains(value.ToLower()));
+            CriteriaAnd(x => x.Email.ToLower().Contains(value.ToLower()));
             return this;
         }
 
         public UserSpec FilterByPermission(EUserPermission value)
         {
-            CriteriaAnd(x => x.Permission != null && x.Permission == value);
+            CriteriaAnd(x => x.Permission == value);
             return this;
         }
 
         public UserSpec FilterByBirthDate(DateTime value)
         {
-            CriteriaAnd(x => x.BirthDate != null && x.BirthDate == value.Date);
+            CriteriaAnd(x => x.BirthDate == value.Date);
             return this;
         }
 

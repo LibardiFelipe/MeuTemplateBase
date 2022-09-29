@@ -7,6 +7,7 @@ using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
 using TemplateBase.Domain.Resources;
 using TemplateBase.Domain.Services.Contracts;
+using TemplateBase.Domain.Specifications;
 
 namespace TemplateBase.Domain.Services
 {
@@ -19,7 +20,7 @@ namespace TemplateBase.Domain.Services
             _uow = uow;
         }
 
-        public async Task<User?> CreatePersonAsync(string? name, string? email, string? password, string? profilePicture, DateTime? birthDate, CancellationToken cancellationToken)
+        public async Task<User> CreateUserAsync(string name, string email, string password, string profilePicture, DateTime birthDate, CancellationToken cancellationToken)
         {
             var repo = _uow.Repository<User>();
 
@@ -29,9 +30,14 @@ namespace TemplateBase.Domain.Services
             if (Notifications.Count > 0)
                 return null;
 
-            // TODO: Validar se o email já existe no banco.
+            bool exists = await repo.ContainsAsync(UserSpec.From(x => x.Email == email), cancellationToken);
+            if (exists)
+            {
+                AddNotification("Email", DefaultMessages.EmailJaExistente);
+                return null;
+            }
 
-            await repo!.AddAsync(entity, cancellationToken);
+            await repo.AddAsync(entity, cancellationToken);
             if (await _uow.CommitAsync(cancellationToken) > 0)
                 return entity;
 
