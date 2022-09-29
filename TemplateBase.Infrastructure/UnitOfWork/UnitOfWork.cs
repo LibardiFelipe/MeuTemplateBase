@@ -19,7 +19,7 @@ namespace TemplateBase.Infrastructure.UnitOfWork
             _dbContext = dbContext;
         }
 
-        public IGenericRepository<TEntity>? Repository<TEntity>() where TEntity : Entity
+        public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : Entity
         {
             if (Repositories.ContainsKey(typeof(TEntity)) == true)
             {

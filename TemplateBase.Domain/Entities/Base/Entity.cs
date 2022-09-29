@@ -7,7 +7,7 @@ namespace TemplateBase.Domain.Entities.Base
 {
     public abstract class Entity : Notifiable<Notification>
     {
-        public Entity(string? id = null)
+        public Entity(string id = null)
         {
             if (string.IsNullOrWhiteSpace(id))
                 Id = Guid.NewGuid();
@@ -26,7 +26,7 @@ namespace TemplateBase.Domain.Entities.Base
         public Guid Id { get; private set; }
         [NotMapped]
         public bool HasChanged { get; private set; }
-        public DateTime? CreatedAt { get; private set; }
+        public DateTime CreatedAt { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
 
         protected void SetNewCreatedAt(DateTime? newCreatedAt = null) => CreatedAt = newCreatedAt ?? DateTime.Now;

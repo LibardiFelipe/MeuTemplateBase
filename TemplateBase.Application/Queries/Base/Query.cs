@@ -1,6 +1,7 @@
 ﻿using Flunt.Notifications;
 using MediatR;
 using System;
+using System.Linq;
 using TemplateBase.Application.Models;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities.Base;
@@ -23,7 +24,7 @@ namespace TemplateBase.Application.Queries.Base
         }
 
         public abstract ISpecification<TEntity> ToSpecification();
-        public bool IsInvalid() => Notifications.Count > 0;
+        public bool IsInvalid() => Notifications.Any();
         public abstract void Validate();
     }
 }

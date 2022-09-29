@@ -3,8 +3,8 @@
     public enum EUserPermission : byte
     {
         Read = 1,
-        ReadWrite = 3,
-        Moderator = 4,
-        Admin = 5
+        ReadWrite = 2,
+        Moderator = 3,
+        Admin = 4
     }
 }
