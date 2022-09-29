@@ -29,13 +29,13 @@ namespace TemplateBase.Domain.Specifications.Base
             Criteria = criteria;
         }
 
-        public Expression<Func<TEntity, bool>>? Criteria { get; private set; }
+        public Expression<Func<TEntity, bool>> Criteria { get; private set; }
 
         public List<Expression<Func<TEntity, object>>> Includes { get; private set; } = new List<Expression<Func<TEntity, object>>>();
 
-        public Expression<Func<TEntity, object>>? OrderByAscend { get; private set; }
+        public Expression<Func<TEntity, object>> OrderByAscend { get; private set; }
 
-        public Expression<Func<TEntity, object>>? OrderByDescend { get; private set; }
+        public Expression<Func<TEntity, object>> OrderByDescend { get; private set; }
 
         public virtual TImplementation FilterById(Guid id)
         {

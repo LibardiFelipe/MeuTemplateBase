@@ -6,7 +6,7 @@ namespace TemplateBase.Domain.Contracts
 {
     public interface IUnitOfWork
     {
-        IGenericRepository<TEntity>? Repository<TEntity>() where TEntity : Entity;
+        IGenericRepository<TEntity> Repository<TEntity>() where TEntity : Entity;
         Task<int> CommitAsync(CancellationToken cancellationToken);
     }
 }
