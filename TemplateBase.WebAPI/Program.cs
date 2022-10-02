@@ -10,6 +10,7 @@ using TemplateBase.Application.Commands.Base;
 using TemplateBase.Application.Queries;
 using TemplateBase.Application.Queries.Base;
 using TemplateBase.Domain.Contracts;
+using TemplateBase.Domain.Middlewares;
 using TemplateBase.Domain.Services;
 using TemplateBase.Domain.Services.Contracts;
 using TemplateBase.Infrastructure.Persistence.Contexts;
@@ -41,6 +42,9 @@ builder.Services.AddMediatR(typeof(Command).Assembly, typeof(CommandHandler).Ass
 // UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+// Middlewares
+builder.Services.AddTransient<OperationCanceledMiddleware>();
 
 //#if(EnableSwaggerSupport)
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -84,6 +88,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 //#endif
 }
+
+// Middlewares
+app.UseMiddleware<OperationCanceledMiddleware>();
 
 app.UseHttpsRedirection();
 
