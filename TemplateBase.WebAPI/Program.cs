@@ -10,11 +10,11 @@ using TemplateBase.Application.Commands.Base;
 using TemplateBase.Application.Queries;
 using TemplateBase.Application.Queries.Base;
 using TemplateBase.Domain.Contracts;
-using TemplateBase.Domain.Middlewares;
 using TemplateBase.Domain.Services;
 using TemplateBase.Domain.Services.Contracts;
 using TemplateBase.Infrastructure.Persistence.Contexts;
 using TemplateBase.Infrastructure.UnitOfWork;
+using TemplateBase.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

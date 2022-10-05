@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace TemplateBase.Domain.Middlewares
+namespace TemplateBase.WebAPI.Middlewares
 {
     public class OperationCanceledMiddleware
     {
