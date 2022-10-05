@@ -43,9 +43,6 @@ builder.Services.AddMediatR(typeof(Command).Assembly, typeof(CommandHandler).Ass
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-// Middlewares
-builder.Services.AddTransient<OperationCanceledMiddleware>();
-
 //#if(EnableSwaggerSupport)
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
