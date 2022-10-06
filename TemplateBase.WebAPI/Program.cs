@@ -1,11 +1,14 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Text;
 using TemplateBase.Application.Commands.Base;
 using TemplateBase.Application.Queries;
 using TemplateBase.Application.Queries.Base;
@@ -27,6 +30,26 @@ builder.Services.AddRouting(options =>
 // Controllers
 builder.Services.AddControllers();
 
+// Authentication
+var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("TokenSecret").Value);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false;
+        x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
 // DataContext
 builder.Services.AddDbContext<DataContext>(x
     => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
@@ -41,7 +64,10 @@ builder.Services.AddMediatR(typeof(Command).Assembly, typeof(CommandHandler).Ass
 
 // UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 //#if(EnableSwaggerSupport)
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -91,6 +117,7 @@ app.UseMiddleware<OperationCanceledMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

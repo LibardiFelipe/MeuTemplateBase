@@ -88,6 +88,15 @@ namespace TemplateBase.Domain.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Email e/ou senha incorreto(s)!.
+        /// </summary>
+        public static string EmailOuSenhaIncorretos {
+            get {
+                return ResourceManager.GetString("EmailOuSenhaIncorretos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O id inserido não é um guid válido!.
         /// </summary>
         public static string Entidade_IdentificadorInvalido {

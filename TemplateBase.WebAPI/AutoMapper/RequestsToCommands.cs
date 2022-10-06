@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using TemplateBase.Application.Commands.Login;
 using TemplateBase.Application.Commands.Persons;
+using TemplateBase.WebAPI.Models.Requests.Login;
 using TemplateBase.WebAPI.Models.Requests.Persons;
 
 namespace TemplateBase.WebAPI.AutoMapper
@@ -9,6 +11,10 @@ namespace TemplateBase.WebAPI.AutoMapper
         public RequestsToCommands()
         {
             CreateMap<CreateUserRequest, CreateUserCommand>()
+                .IncludeAllDerived()
+                .AfterMap((_, command) => command.Validate());
+
+            CreateMap<AuthenticationRequest, AuthenticationCommand>()
                 .IncludeAllDerived()
                 .AfterMap((_, command) => command.Validate());
         }
