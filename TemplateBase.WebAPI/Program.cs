@@ -41,7 +41,10 @@ builder.Services.AddMediatR(typeof(Command).Assembly, typeof(CommandHandler).Ass
 
 // UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 //#if(EnableSwaggerSupport)
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

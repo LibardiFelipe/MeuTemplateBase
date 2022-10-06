@@ -126,6 +126,9 @@
   <data name="EmailJaExistente" xml:space="preserve">
     <value>O email informado já se encontra cadastrado.</value>
   </data>
+  <data name="EmailOuSenhaIncorretos" xml:space="preserve">
+    <value>Email e/ou senha incorreto(s)!</value>
+  </data>
   <data name="Entidade_IdentificadorInvalido" xml:space="preserve">
     <value>O id inserido não é um guid válido!</value>
   </data>
