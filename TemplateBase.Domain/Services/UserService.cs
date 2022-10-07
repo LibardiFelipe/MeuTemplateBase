@@ -62,7 +62,7 @@ namespace TemplateBase.Domain.Services
             };
 
             // TODO: Gerar uma hash de confirmação para injetar no body
-            var replces = new Dictionary<string, string>
+            var replaces = new Dictionary<string, string>
             {
                 { "confirmationHash", "HASHQUESERÁGERADAPROUSUÁRIOCONFIRMAROEMAIL" }
             };
@@ -72,7 +72,7 @@ namespace TemplateBase.Domain.Services
                 Body = "<b>Email body in html {confirmationHash}</b>", // TODO: Buscar o template direto do banco
                 Subject = "Email Subject"
             };
-            emailToSend.InjectToBody(replces);
+            emailToSend.InjectToBody(replaces);
 
             emailToSend.AddAddressee(email);
             EmailService.Send(emailConfig, emailToSend);
