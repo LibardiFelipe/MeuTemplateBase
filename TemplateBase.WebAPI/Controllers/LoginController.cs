@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TemplateBase.Application.Commands.Login;
@@ -22,6 +23,7 @@ namespace TemplateBase.WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticationRequest request)
         {
             var command = _mapper.Map<AuthenticationCommand>(request);

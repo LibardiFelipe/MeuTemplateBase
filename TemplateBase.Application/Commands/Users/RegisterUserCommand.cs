@@ -3,7 +3,7 @@ using TemplateBase.Application.Commands.Base;
 
 namespace TemplateBase.Application.Commands.Persons
 {
-    public class CreateUserCommand : Command
+    public class RegisterUserCommand : Command
     {
         public string Name { get; set; }
         public string Email { get; set; }

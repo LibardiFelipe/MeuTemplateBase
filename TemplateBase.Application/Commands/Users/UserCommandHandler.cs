@@ -9,7 +9,7 @@ using TemplateBase.Domain.Services.Contracts;
 namespace TemplateBase.Application.Commands.Persons
 {
     public class UserCommandHandler : CommandHandler,
-        IRequestHandler<CreateUserCommand, Result>
+        IRequestHandler<RegisterUserCommand, Result>
     {
         private readonly IUserService _personService;
 
@@ -18,12 +18,12 @@ namespace TemplateBase.Application.Commands.Persons
             _personService = personService;
         }
 
-        public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             if (request.IsInvalid())
                 return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
 
-            var entity = await _personService.CreateUserAsync(request.Name, request.Email,
+            var entity = await _personService.RegisterUserAsync(request.Name, request.Email,
                 request.Password, request.ProfilePictureUrl, request.BirthDate, cancellationToken);
 
             if (_personService.IsInvalid())
