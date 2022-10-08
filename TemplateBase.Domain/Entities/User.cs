@@ -4,6 +4,7 @@ using System;
 using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Domain.Enumerators;
 using TemplateBase.Domain.Resources;
+using TemplateBase.Domain.Utils;
 
 namespace TemplateBase.Domain.Entities
 {
@@ -84,10 +85,12 @@ namespace TemplateBase.Domain.Entities
             if (!fromConstructor && (Password?.Equals(value) ?? false))
                 return this;
 
-            Password = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNullOrWhiteSpace(Password, "Password", string.Format(DefaultMessages.CampoObrigatorio, "Senha")));
+                .IsNotNullOrWhiteSpace(value, "Password", string.Format(DefaultMessages.CampoObrigatorio, "Senha")));
+            // TODO: Adicionar verificação de segurança da senha
+
+            Password = Hasher.Hash(value);
 
             FlagAsChanged();
             return this;

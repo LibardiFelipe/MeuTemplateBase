@@ -15,6 +15,7 @@ using TemplateBase.Domain.Entities.Classes;
 using TemplateBase.Domain.Resources;
 using TemplateBase.Domain.Services.Contracts;
 using TemplateBase.Domain.Specifications;
+using TemplateBase.Domain.Utils;
 
 namespace TemplateBase.Domain.Services
 {
@@ -32,8 +33,9 @@ namespace TemplateBase.Domain.Services
         public async Task<AuthData> AuthenticateAsync(string email, string password, CancellationToken cancellationToken)
         {
             var userRepo = _uow.Repository<User>();
-            var user = (await userRepo.GetAllAsync(UserSpec.From(x => x.Email == email && x.Password == password), cancellationToken)).FirstOrDefault();
-            if (user == null)
+            var user = (await userRepo.GetAllAsync(UserSpec.From(x => x.Email == email), cancellationToken)).FirstOrDefault();
+
+            if (user == null || Hasher.Verify(password, user.Password) is false)
             {
                 AddNotification("User", DefaultMessages.EmailOuSenhaIncorretos);
                 return null;

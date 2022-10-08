@@ -50,6 +50,10 @@ namespace TemplateBase.Domain.Services
             return null;
         }
 
+        public IReadOnlyCollection<Notification> GetNotifications() => Notifications;
+        public bool IsInvalid() => Notifications.Any();
+
+        #region Privados
         private void SendVerificationEmail(string email)
         {
             var emailConfig = new EmailConfig
@@ -77,8 +81,6 @@ namespace TemplateBase.Domain.Services
             emailToSend.AddAddressee(email);
             EmailService.Send(emailConfig, emailToSend);
         }
-
-        public IReadOnlyCollection<Notification> GetNotifications() => Notifications;
-        public bool IsInvalid() => Notifications.Any();
+        #endregion
     }
 }
