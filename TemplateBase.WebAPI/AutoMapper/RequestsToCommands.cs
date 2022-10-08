@@ -14,7 +14,7 @@ namespace TemplateBase.WebAPI.AutoMapper
                 .IncludeAllDerived()
                 .AfterMap((_, command) => command.Validate());
 
-            CreateMap<AuthenticationRequest, AuthenticationCommand>()
+            CreateMap<UserLoginRequest, UserLoginCommand>()
                 .IncludeAllDerived()
                 .AfterMap((_, command) => command.Validate());
         }

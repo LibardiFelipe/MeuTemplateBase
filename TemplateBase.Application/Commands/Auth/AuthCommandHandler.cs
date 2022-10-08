@@ -9,7 +9,7 @@ using TemplateBase.Domain.Services.Contracts;
 namespace TemplateBase.Application.Commands.Login
 {
     public class AuthenticateCommandHandler : CommandHandler,
-        IRequestHandler<AuthenticationCommand, Result>
+        IRequestHandler<UserLoginCommand, Result>
     {
         private readonly IAuthenticationService _authService;
 
@@ -18,7 +18,7 @@ namespace TemplateBase.Application.Commands.Login
             _authService = authService;
         }
 
-        public async Task<Result> Handle(AuthenticationCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UserLoginCommand request, CancellationToken cancellationToken)
         {
             if (request.IsInvalid())
                 return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);

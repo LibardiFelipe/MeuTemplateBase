@@ -2,7 +2,7 @@
 
 namespace TemplateBase.Application.Commands.Login
 {
-    public class AuthenticationCommand : Command
+    public class UserLoginCommand : Command
     {
         public string Email { get; set; }
         public string Password { get; set; }

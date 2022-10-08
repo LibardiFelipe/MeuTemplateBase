@@ -9,24 +9,36 @@ using TemplateBase.WebAPI.Models.ViewModels;
 
 namespace TemplateBase.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    [AllowAnonymous]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-        public LoginController(IMediator mediator, IMapper mapper)
+        public AuthController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromBody] AuthenticationRequest request)
+        public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest request)
         {
-            var command = _mapper.Map<AuthenticationCommand>(request);
+            var command = _mapper.Map<UserLoginCommand>(request);
+            var result = await _mediator.Send(command);
+            var response = _mapper.Map<ResultViewModel>(result);
+
+            return response.Success
+                ? Ok(response)
+                : BadRequest(response);
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterAsync([FromBody] UserLoginRequest request)
+        {
+            var command = _mapper.Map<UserLoginCommand>(request);
             var result = await _mediator.Send(command);
             var response = _mapper.Map<ResultViewModel>(result);
 
