@@ -11,7 +11,7 @@ namespace TemplateBase.Infrastructure.Persistence.Contexts
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<TemplateEmail> EmailTemplates { get; set; }
+        public DbSet<TemplateEmail> TemplatesEmail { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
