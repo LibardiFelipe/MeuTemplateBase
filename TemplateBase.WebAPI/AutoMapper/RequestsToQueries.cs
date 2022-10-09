@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using TemplateBase.Application.Queries.TemplatesEmail;
 using TemplateBase.Application.Queries.Users;
 using TemplateBase.WebAPI.Models.Requests.Persons;
+using TemplateBase.WebAPI.Models.Requests.TemplatesEmail;
 
 namespace TemplateBase.WebAPI.AutoMapper
 {
@@ -16,6 +18,12 @@ namespace TemplateBase.WebAPI.AutoMapper
                     .FilterByEmail(src.Email)
                     .FilterByType(src.Type)
                     .FilterByBirthDate(src.BirthDate);
+                });
+
+            CreateMap<FilterTemplateEmailRequest, TemplateEmailQuery>()
+                .ConstructUsing((src, ctx) =>
+                {
+                    return new TemplateEmailQuery();
                 });
         }
     }

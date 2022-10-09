@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TemplateBase.Application.Commands.TemplatesEmail;
+using TemplateBase.Application.Queries.TemplatesEmail;
+using TemplateBase.Application.Queries.Users;
 using TemplateBase.WebAPI.Models.Requests.TemplatesEmail;
 using TemplateBase.WebAPI.Models.ViewModels;
 
@@ -28,6 +30,30 @@ namespace TemplateBase.WebAPI.Controllers
         {
             var command = _mapper.Map<CreateTemplateEmailCommand>(request);
             var result = await _mediator.Send(command);
+            var response = _mapper.Map<ResultViewModel>(result);
+
+            return response.Success
+                ? Ok(response)
+                : BadRequest(response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync([FromQuery] FilterTemplateEmailRequest request)
+        {
+            var query = _mapper.Map<TemplateEmailQuery>(request);
+            var result = await _mediator.Send(query);
+            var response = _mapper.Map<ResultViewModel>(result);
+
+            return response.Success
+                ? Ok(response)
+                : BadRequest(response);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] string id)
+        {
+            var query = new TemplateEmailQuery(id);
+            var result = await _mediator.Send(query);
             var response = _mapper.Map<ResultViewModel>(result);
 
             return response.Success
