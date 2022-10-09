@@ -64,7 +64,7 @@ namespace TemplateBase.WebAPI.Controllers
                 : BadRequest(response);
         }
 
-        [HttpPost("verify")]
+        [HttpGet("verify")]
         [AllowAnonymous]
         public async Task<IActionResult> VerifyUserAsync([FromQuery] string hash)
         {
