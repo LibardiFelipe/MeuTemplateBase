@@ -34,17 +34,5 @@ namespace TemplateBase.WebAPI.Controllers
                 ? Ok(response)
                 : BadRequest(response);
         }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] UserLoginRequest request)
-        {
-            var command = _mapper.Map<UserLoginCommand>(request);
-            var result = await _mediator.Send(command);
-            var response = _mapper.Map<ResultViewModel>(result);
-
-            return response.Success
-                ? Ok(response)
-                : BadRequest(response);
-        }
     }
 }

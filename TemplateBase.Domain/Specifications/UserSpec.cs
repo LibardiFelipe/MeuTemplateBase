@@ -23,9 +23,9 @@ namespace TemplateBase.Domain.Specifications
             return this;
         }
 
-        public UserSpec FilterByPermission(EUserPermission value)
+        public UserSpec FilterByType(EUserType value)
         {
-            CriteriaAnd(x => x.Permission == value);
+            CriteriaAnd(x => x.Type == value);
             return this;
         }
 

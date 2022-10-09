@@ -41,13 +41,25 @@ namespace TemplateBase.Domain.Services
                 return null;
             }
 
+            if (user.IsVerified is false)
+            {
+                AddNotification("User", DefaultMessages.ConfirmacaoEmailPendente);
+                return null;
+            }
+
+            if (user.IsLocked)
+            {
+                AddNotification("User", string.Format(DefaultMessages.UsuarioBloqueado, user.LockReason));
+                return null;
+            }
+
             return new AuthData
             {
                 Name = user.Name,
                 Email = user.Email,
-                Permission = user.Permission,
+                Type = user.Type,
                 Token = GenerateToken(user)
-        };
+            };
         }
 
         private string GenerateToken(User user)
@@ -59,7 +71,7 @@ namespace TemplateBase.Domain.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("Id", user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, user.Permission.ToString()),
+                    new Claim(ClaimTypes.Role, user.Type.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

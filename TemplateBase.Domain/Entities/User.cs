@@ -29,9 +29,11 @@ namespace TemplateBase.Domain.Entities
             ChangeProfilePictureUrl(profilePictureUrl, true);
             ChangeBirthDate(birthDate, true);
 
-            // Por padrão, a permissão do usuário começa como somente leitura,
-            // e passa para Read/Write após confirmar o email.
-            ChangePermission(EUserPermission.Read, true);
+            // Verificação por email necessária
+            ChangeIsVerified(false, true);
+            // Usuário sempre começa sendo o básico
+            ChangeType(EUserType.Basic, true);
+            ChangeIsLocked(false, true);
         }
         #endregion
 
@@ -41,7 +43,10 @@ namespace TemplateBase.Domain.Entities
         public string Password { get; private set; }
         public string ProfilePictureUrl { get; private set; }
         public DateTime BirthDate { get; private set; }
-        public EUserPermission Permission { get; private set; }
+        public EUserType Type { get; private set; }
+        public bool IsVerified { get; private set; }
+        public bool IsLocked { get; private set; }
+        public string LockReason { get; private set; }
         #endregion
 
         #region Validações
@@ -62,6 +67,42 @@ namespace TemplateBase.Domain.Entities
             // que tenham tido alguma alteração.
             // Essa função é responsável por marcar a entidade com
             // a flag que sinaliza que ela foi alterada.
+            FlagAsChanged();
+            return this;
+        }
+
+        public User ChangeIsVerified(bool value, bool fromConstructor = false)
+        {
+            if (!fromConstructor && IsVerified.Equals(value))
+                return this;
+
+            IsVerified = value;
+
+            FlagAsChanged();
+            return this;
+        }
+
+        public User ChangeIsLocked(bool value, bool fromConstructor = false)
+        {
+            if (!fromConstructor && IsLocked.Equals(value))
+                return this;
+
+            IsLocked = value;
+
+            FlagAsChanged();
+            return this;
+        }
+
+        public User ChangeLockReason(string value, bool fromConstructor = false)
+        {
+            if (!fromConstructor && (LockReason?.Equals(value) ?? false))
+                return this;
+
+            LockReason = value;
+            AddNotifications(new Contract<Notification>()
+                .Requires()
+                .IsNotNullOrWhiteSpace(LockReason, "LockReason", string.Format(DefaultMessages.CampoObrigatorio, "Motivo do Block")));
+
             FlagAsChanged();
             return this;
         }
@@ -110,15 +151,15 @@ namespace TemplateBase.Domain.Entities
             return this;
         }
 
-        public User ChangePermission(EUserPermission value, bool fromConstructor = false)
+        public User ChangeType(EUserType value, bool fromConstructor = false)
         {
-            if (!fromConstructor && Permission.Equals(value))
+            if (!fromConstructor && Type.Equals(value))
                 return this;
 
-            Permission = value;
+            Type = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNull(Permission, "Permission", string.Format(DefaultMessages.CampoObrigatorio, "Permissão")));
+                .IsNotNull(Type, "Type", string.Format(DefaultMessages.CampoObrigatorio, "Permissão")));
 
             FlagAsChanged();
             return this;

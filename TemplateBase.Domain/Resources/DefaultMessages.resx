@@ -123,6 +123,9 @@
   <data name="CampoObrigatorio" xml:space="preserve">
     <value>O campo de {0} é obrigatório.</value>
   </data>
+  <data name="ConfirmacaoEmailPendente" xml:space="preserve">
+    <value>É necessário confirmar o seu email antes de se contectar.</value>
+  </data>
   <data name="EmailJaExistente" xml:space="preserve">
     <value>O email informado já se encontra cadastrado.</value>
   </data>
@@ -152,5 +155,8 @@
   </data>
   <data name="Service_InternalError" xml:space="preserve">
     <value>Um erro interno ocorreu durante a execução do serviço!</value>
+  </data>
+  <data name="UsuarioBloqueado" xml:space="preserve">
+    <value>Sua conta foi bloqueada pelo seguinte motivo: {0}</value>
   </data>
 </root>

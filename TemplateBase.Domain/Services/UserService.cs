@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TemplateBase.Domain.Classes;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
@@ -19,18 +20,23 @@ namespace TemplateBase.Domain.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _uow;
+        private readonly string _confirmationSecret = string.Empty;
+        private readonly string _confirmationRoute = string.Empty;
 
         public UserService(IUnitOfWork uow, IConfiguration configuration)
         {
             _uow = uow;
             _configuration = configuration;
+            _confirmationSecret = _configuration.GetValue<string>("EmailConfirmationSecret");
+            _confirmationRoute = _configuration.GetValue<string>("EmailConfirmationRoute");
         }
 
-        public async Task<User> RegisterUserAsync(string name, string email, string password, string profilePicture, DateTime birthDate, CancellationToken cancellationToken)
+        public async Task<User> RegisterUserAsync(string name, string email, string password, DateTime birthDate, CancellationToken cancellationToken)
         {
             var repo = _uow.Repository<User>();
 
-            var entity = new User(name, email, password, profilePicture, birthDate);
+            // TODO: Adicionar serviço de upload de imagem e setar a url
+            var entity = new User(name, email, password, "", birthDate);
             AddNotifications(entity);
 
             bool exists = await repo.ContainsAsync(UserSpec.From(x => x.Email == email), cancellationToken);
@@ -40,7 +46,7 @@ namespace TemplateBase.Domain.Services
             if (Notifications.Any())
                 return null;
 
-            SendVerificationEmail(email);
+            SendVerificationEmail(entity);
 
             await repo.AddAsync(entity, cancellationToken);
             if (await _uow.CommitAsync(cancellationToken) > 0)
@@ -50,11 +56,40 @@ namespace TemplateBase.Domain.Services
             return null;
         }
 
+        public async Task<bool> VerifyUserAsync(string hash, CancellationToken cancellationToken)
+        {
+            var repo = _uow.Repository<User>();
+
+            var idString = Crypt.DecryptString(_confirmationSecret, hash);
+            if (Guid.TryParse(idString, out var idGuid) is false)
+            {
+                AddNotification("", "Hash inválida!");
+                return false;
+            }
+
+            var user = await repo.GetByIdAsync(idGuid, cancellationToken);
+            if (user is null)
+            {
+                AddNotification("", "Hash inválida!");
+                return false;
+            }
+
+            user.ChangeIsVerified(true);
+
+            repo.Update(user);
+
+            if (await _uow.CommitAsync(cancellationToken) > 0)
+                return true;
+
+            AddNotification("", DefaultMessages.Service_InternalError);
+            return false;
+        }
+
         public IReadOnlyCollection<Notification> GetNotifications() => Notifications;
         public bool IsInvalid() => Notifications.Any();
 
         #region Privados
-        private void SendVerificationEmail(string email)
+        private bool SendVerificationEmail(User user)
         {
             var emailConfig = new EmailConfig
             {
@@ -65,21 +100,21 @@ namespace TemplateBase.Domain.Services
                 EnableSsl = _configuration.GetValue<bool>("Email:EnableSsl"),
             };
 
-            // TODO: Gerar uma hash de confirmação para injetar no body
             var replaces = new Dictionary<string, string>
             {
-                { "confirmationHash", "HASHQUESERÁGERADAPROUSUÁRIOCONFIRMAROEMAIL" }
+                { "@confirmationHash", Crypt.EncryptString(_confirmationSecret, user.Id.ToString()) }
             };
 
             var emailToSend = new Email
             {
-                Body = "<b>Email body in html {confirmationHash}</b>", // TODO: Buscar o template direto do banco
+                // TODO: Buscar o template direto do banco
+                Body = $"<!doctype html><html><body><a href=\"{_confirmationRoute}?hash=@confirmationHash\"><p>Clique aqui para confirmar seu cadastro.</p></a></body></html>",
                 Subject = "Email Subject"
             };
             emailToSend.InjectToBody(replaces);
 
-            emailToSend.AddAddressee(email);
-            EmailService.Send(emailConfig, emailToSend);
+            emailToSend.AddAddressee(user.Email);
+            return EmailService.Send(emailConfig, emailToSend);
         }
         #endregion
     }

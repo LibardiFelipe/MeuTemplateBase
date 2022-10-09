@@ -7,7 +7,7 @@ namespace TemplateBase.WebAPI.Models.Requests.Persons
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public EUserPermission? Permission { get; set; }
+        public EUserType? Type { get; set; }
         public DateTime? BirthDate { get; set; }
     }
 }

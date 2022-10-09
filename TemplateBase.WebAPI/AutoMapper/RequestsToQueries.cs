@@ -14,7 +14,7 @@ namespace TemplateBase.WebAPI.AutoMapper
                     return new UserQuery()
                     .FilterByName(src.Name)
                     .FilterByEmail(src.Email)
-                    .FilterByPermission(src.Permission)
+                    .FilterByType(src.Type)
                     .FilterByBirthDate(src.BirthDate);
                 });
         }

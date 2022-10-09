@@ -16,7 +16,7 @@ namespace TemplateBase.Domain.Classes
                 return;
 
             foreach (var item in values)
-                Body = Body.Replace("{" + item.Key + "}", item.Value);
+                Body = Body.Replace(item.Key, item.Value);
         }
 
         public void AddAddressee(string email)

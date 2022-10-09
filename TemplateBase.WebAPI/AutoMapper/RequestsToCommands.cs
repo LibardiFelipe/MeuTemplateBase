@@ -2,7 +2,7 @@
 using TemplateBase.Application.Commands.Login;
 using TemplateBase.Application.Commands.Persons;
 using TemplateBase.WebAPI.Models.Requests.Login;
-using TemplateBase.WebAPI.Models.Requests.Persons;
+using TemplateBase.WebAPI.Models.Requests.Users;
 
 namespace TemplateBase.WebAPI.AutoMapper
 {
