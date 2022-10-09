@@ -115,6 +115,24 @@ namespace TemplateBase.Domain.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não foi possível encontrar a {0} especificada..
+        /// </summary>
+        public static string EntidadeNaoEncontrada {
+            get {
+                return ResourceManager.GetString("EntidadeNaoEncontrada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não foi possível encontrar o {0} especificado..
+        /// </summary>
+        public static string EntidadeNaoEncontrado {
+            get {
+                return ResourceManager.GetString("EntidadeNaoEncontrado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a A query não foi executada!.
         /// </summary>
         public static string Hander_FalhaAoExecutarQuery {

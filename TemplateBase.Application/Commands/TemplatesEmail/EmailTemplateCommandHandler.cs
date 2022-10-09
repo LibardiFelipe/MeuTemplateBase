@@ -9,7 +9,8 @@ using TemplateBase.Domain.Services.Contracts;
 namespace TemplateBase.Application.Commands.TemplatesEmail
 {
     public class TemplateEmailCommandHandler : CommandHandler,
-        IRequestHandler<CreateTemplateEmailCommand, Result>
+        IRequestHandler<CreateTemplateEmailCommand, Result>,
+        IRequestHandler<UpdateTemplateEmailCommand, Result>
     {
         private readonly ITemplateEmailService _emailTemplateService;
 
@@ -24,6 +25,19 @@ namespace TemplateBase.Application.Commands.TemplatesEmail
                 return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
 
             var entity = await _emailTemplateService.CreateTemplateEmailAsync(request.Name, request.Body, cancellationToken);
+
+            if (_emailTemplateService.IsInvalid())
+                return new Result(DefaultMessages.Handler_FalhaAoExecutarComando, false, _emailTemplateService.GetNotifications());
+
+            return new Result(DefaultMessages.Handler_ComandoExecutado, true, entity);
+        }
+
+        public async Task<Result> Handle(UpdateTemplateEmailCommand request, CancellationToken cancellationToken)
+        {
+            if (request.IsInvalid())
+                return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
+
+            var entity = await _emailTemplateService.UpdateTemplateEmailAsync(request.TemplateEmailId, request.Name, request.Body, cancellationToken);
 
             if (_emailTemplateService.IsInvalid())
                 return new Result(DefaultMessages.Handler_FalhaAoExecutarComando, false, _emailTemplateService.GetNotifications());

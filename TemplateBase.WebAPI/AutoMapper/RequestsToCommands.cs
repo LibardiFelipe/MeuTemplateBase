@@ -23,6 +23,10 @@ namespace TemplateBase.WebAPI.AutoMapper
             CreateMap<CreateTemplateEmailRequest, CreateTemplateEmailCommand>()
                 .IncludeAllDerived()
                 .AfterMap((_, command) => command.Validate());
+
+            CreateMap<UpdateTemplateEmailRequest, UpdateTemplateEmailCommand>()
+                .IncludeAllDerived()
+                .AfterMap((_, command) => command.Validate());
         }
     }
 }

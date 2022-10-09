@@ -132,6 +132,12 @@
   <data name="EmailOuSenhaIncorretos" xml:space="preserve">
     <value>Email e/ou senha incorreto(s)!</value>
   </data>
+  <data name="EntidadeNaoEncontrada" xml:space="preserve">
+    <value>Não foi possível encontrar a {0} especificada.</value>
+  </data>
+  <data name="EntidadeNaoEncontrado" xml:space="preserve">
+    <value>Não foi possível encontrar o {0} especificado.</value>
+  </data>
   <data name="Entidade_IdentificadorInvalido" xml:space="preserve">
     <value>O id inserido não é um guid válido!</value>
   </data>

@@ -1,4 +1,5 @@
 ﻿using Flunt.Notifications;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -30,6 +31,29 @@ namespace TemplateBase.Domain.Services
                 return null;
 
             await repo.AddAsync(entity, cancellationToken);
+            if (await _uow.CommitAsync(cancellationToken) > 0)
+                return entity;
+
+            AddNotification("", DefaultMessages.Service_InternalError);
+            return null;
+        }
+
+        public async Task<TemplateEmail> UpdateTemplateEmailAsync(Guid id, string name, string body, CancellationToken cancellationToken)
+        {
+            var repo = _uow.Repository<TemplateEmail>();
+
+            var entity = await repo.GetByIdAsync(id, cancellationToken);
+            if (entity is null)
+            {
+                AddNotification("Id", string.Format(DefaultMessages.EntidadeNaoEncontrado, "Template"));
+                return null;
+            }
+
+            entity.ChangeBody(body)
+                .ChangeName(name);
+
+            repo.Update(entity);
+
             if (await _uow.CommitAsync(cancellationToken) > 0)
                 return entity;
 

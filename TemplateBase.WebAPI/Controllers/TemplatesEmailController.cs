@@ -37,6 +37,18 @@ namespace TemplateBase.WebAPI.Controllers
                 : BadRequest(response);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateTemplateEmailAsync([FromBody] UpdateTemplateEmailRequest request)
+        {
+            var command = _mapper.Map<UpdateTemplateEmailCommand>(request);
+            var result = await _mediator.Send(command);
+            var response = _mapper.Map<ResultViewModel>(result);
+
+            return response.Success
+                ? Ok(response)
+                : BadRequest(response);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllAsync([FromQuery] FilterTemplateEmailRequest request)
         {
