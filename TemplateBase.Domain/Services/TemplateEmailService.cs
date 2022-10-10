@@ -51,9 +51,12 @@ namespace TemplateBase.Domain.Services
 
             entity.ChangeBody(body)
                 .ChangeName(name);
+            AddNotifications(entity);
+
+            if (Notifications.Any())
+                return null;
 
             repo.Update(entity);
-
             if (await _uow.CommitAsync(cancellationToken) > 0)
                 return entity;
 
