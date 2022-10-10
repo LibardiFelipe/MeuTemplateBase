@@ -10,7 +10,8 @@ namespace TemplateBase.Application.Commands.TemplatesEmail
 {
     public class TemplateEmailCommandHandler : CommandHandler,
         IRequestHandler<CreateTemplateEmailCommand, Result>,
-        IRequestHandler<UpdateTemplateEmailCommand, Result>
+        IRequestHandler<UpdateTemplateEmailCommand, Result>,
+        IRequestHandler<DeleteEmailTemplateCommand, Result>
     {
         private readonly ITemplateEmailService _emailTemplateService;
 
@@ -38,6 +39,19 @@ namespace TemplateBase.Application.Commands.TemplatesEmail
                 return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
 
             var entity = await _emailTemplateService.UpdateTemplateEmailAsync(request.TemplateEmailId, request.Name, request.Body, cancellationToken);
+
+            if (_emailTemplateService.IsInvalid())
+                return new Result(DefaultMessages.Handler_FalhaAoExecutarComando, false, _emailTemplateService.GetNotifications());
+
+            return new Result(DefaultMessages.Handler_ComandoExecutado, true, entity);
+        }
+
+        public async Task<Result> Handle(DeleteEmailTemplateCommand request, CancellationToken cancellationToken)
+        {
+            if (request.IsInvalid())
+                return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
+
+            var entity = await _emailTemplateService.DeleteTemplateEmailAsync(request.Id, cancellationToken);
 
             if (_emailTemplateService.IsInvalid())
                 return new Result(DefaultMessages.Handler_FalhaAoExecutarComando, false, _emailTemplateService.GetNotifications());

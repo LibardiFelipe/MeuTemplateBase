@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using TemplateBase.Application.Commands.TemplatesEmail;
 using TemplateBase.Application.Queries.TemplatesEmail;
@@ -66,6 +67,18 @@ namespace TemplateBase.WebAPI.Controllers
         {
             var query = new TemplateEmailQuery(id);
             var result = await _mediator.Send(query);
+            var response = _mapper.Map<ResultViewModel>(result);
+
+            return response.Success
+                ? Ok(response)
+                : BadRequest(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteByIdAsync([FromRoute] Guid id)
+        {
+            var command = new DeleteEmailTemplateCommand(id);
+            var result = await _mediator.Send(command);
             var response = _mapper.Map<ResultViewModel>(result);
 
             return response.Success

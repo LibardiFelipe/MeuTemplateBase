@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
 using TemplateBase.Domain.Resources;
@@ -64,7 +65,27 @@ namespace TemplateBase.Domain.Services
             return null;
         }
 
+        public async Task<bool> DeleteTemplateEmailAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var repo = _uow.Repository<TemplateEmail>();
+
+            var entity = await repo.GetByIdAsync(id, cancellationToken);
+            if (entity is null)
+            {
+                AddNotification("Id", string.Format(DefaultMessages.EntidadeNaoEncontrado, "Template"));
+                return false;
+            }
+
+            repo.Delete(entity);
+            if (await _uow.CommitAsync(cancellationToken) > 0)
+                return true;
+
+            AddNotification("", DefaultMessages.Service_InternalError);
+            return false;
+        }
+
         public IReadOnlyCollection<Notification> GetNotifications() => Notifications;
         public bool IsInvalid() => Notifications.Any();
+
     }
 }
