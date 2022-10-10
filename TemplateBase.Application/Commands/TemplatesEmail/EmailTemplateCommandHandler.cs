@@ -38,7 +38,7 @@ namespace TemplateBase.Application.Commands.TemplatesEmail
             if (request.IsInvalid())
                 return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
 
-            var entity = await _emailTemplateService.UpdateTemplateEmailAsync(request.TemplateEmailId, request.Name, request.Body, cancellationToken);
+            var entity = await _emailTemplateService.UpdateTemplateEmailAsync(request.Id, request.Name, request.Body, cancellationToken);
 
             if (_emailTemplateService.IsInvalid())
                 return new Result(DefaultMessages.Handler_FalhaAoExecutarComando, false, _emailTemplateService.GetNotifications());
