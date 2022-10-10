@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -21,11 +22,11 @@ namespace TemplateBase.Domain.Utils
 
                     ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
 
-                    using (MemoryStream memoryStream = new MemoryStream())
+                    using (MemoryStream memoryStream = new())
                     {
-                        using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, encryptor, CryptoStreamMode.Write))
+                        using (CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write))
                         {
-                            using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
+                            using (StreamWriter streamWriter = new(cryptoStream))
                             {
                                 streamWriter.Write(text);
                             }
@@ -35,10 +36,11 @@ namespace TemplateBase.Domain.Utils
                     }
                 }
 
-                return Convert.ToBase64String(array).Replace("/", "_");
+                return WebEncoders.Base64UrlEncode(array);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return "";
             }
         }
@@ -48,7 +50,7 @@ namespace TemplateBase.Domain.Utils
             try
             {
                 byte[] iv = new byte[16];
-                byte[] buffer = Convert.FromBase64String(text.Replace("_", "/"));
+                byte[] buffer = WebEncoders.Base64UrlDecode(text);
 
                 using (Aes aes = Aes.Create())
                 {
@@ -56,11 +58,11 @@ namespace TemplateBase.Domain.Utils
                     aes.IV = iv;
                     ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
 
-                    using (MemoryStream memoryStream = new MemoryStream(buffer))
+                    using (MemoryStream memoryStream = new(buffer))
                     {
-                        using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, decryptor, CryptoStreamMode.Read))
+                        using (CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read))
                         {
-                            using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
+                            using (StreamReader streamReader = new(cryptoStream))
                             {
                                 return streamReader.ReadToEnd();
                             }
@@ -68,8 +70,9 @@ namespace TemplateBase.Domain.Utils
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return "";
             }
         }
