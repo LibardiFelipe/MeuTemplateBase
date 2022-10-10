@@ -114,8 +114,7 @@ namespace TemplateBase.Domain.Services
             var replaces = new Dictionary<string, string>
             {
                 { "@user", user.Name.Split(' ').FirstOrDefault() ?? "usuário" },
-                { "@confirmationRoute", _configuration.GetValue<string>("EmailConfirmationRoute") },
-                { "@confirmationHash", Crypt.EncryptString(_confirmationSecret, user.Id.ToString()) }
+                { "@confirmationUrl", _configuration.GetValue<string>("EmailConfirmationRoute") + "?hash=" + Crypt.EncryptString(_confirmationSecret, user.Id.ToString()) },
             };
 
             var emailToSend = new Email
