@@ -26,7 +26,7 @@ namespace TemplateBase.Application.Commands.Persons
                 return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
 
             var entity = await _userService.RegisterUserAsync(request.Name, request.Email,
-                request.Password, request.BirthDate, cancellationToken);
+                request.Password, request.BirthDate, request.ProfilePicture, cancellationToken);
 
             if (_userService.IsInvalid())
                 return new Result(DefaultMessages.Handler_FalhaAoExecutarComando, false, _userService.GetNotifications());

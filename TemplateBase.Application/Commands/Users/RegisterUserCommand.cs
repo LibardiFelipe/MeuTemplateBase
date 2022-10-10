@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using TemplateBase.Application.Commands.Base;
 
 namespace TemplateBase.Application.Commands.Persons
@@ -9,6 +10,7 @@ namespace TemplateBase.Application.Commands.Persons
         public string Email { get; set; }
         public string Password { get; set; }
         public DateTime BirthDate { get; set; }
+        public IFormFile ProfilePicture { get; set; }
 
         public override void Validate()
         {

@@ -53,7 +53,7 @@ namespace TemplateBase.WebAPI.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterUserRequest request)
+        public async Task<IActionResult> RegisterUserAsync([FromForm] RegisterUserRequest request)
         {
             var command = _mapper.Map<RegisterUserCommand>(request);
             var result = await _mediator.Send(command);

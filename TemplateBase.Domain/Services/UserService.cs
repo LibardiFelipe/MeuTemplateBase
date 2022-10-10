@@ -1,11 +1,11 @@
 ﻿using Flunt.Notifications;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using TemplateBase.Domain.Classes;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
@@ -31,12 +31,12 @@ namespace TemplateBase.Domain.Services
             _confirmationRoute = _configuration.GetValue<string>("EmailConfirmationRoute");
         }
 
-        public async Task<User> RegisterUserAsync(string name, string email, string password, DateTime birthDate, CancellationToken cancellationToken)
+        public async Task<User> RegisterUserAsync(string name, string email, string password, DateTime birthDate, IFormFile profilePicture, CancellationToken cancellationToken)
         {
             var repo = _uow.Repository<User>();
             var repoTemplates = _uow.Repository<TemplateEmail>();
 
-            // TODO: Adicionar serviço de upload de imagem e setar a url
+            // TODO: Implementar o serviço de upload de imagem
             var entity = new User(name, email, password, "", birthDate);
             AddNotifications(entity);
 
@@ -114,7 +114,7 @@ namespace TemplateBase.Domain.Services
             var replaces = new Dictionary<string, string>
             {
                 { "@user", user.Name.Split(' ').FirstOrDefault() ?? "usuário" },
-                { "@confirmationUrl", _configuration.GetValue<string>("EmailConfirmationRoute") + "?hash=" + Crypt.EncryptString(_confirmationSecret, user.Id.ToString()) },
+                { "@confirmationUrl", _confirmationRoute + "?hash=" + Crypt.EncryptString(_confirmationSecret, user.Id.ToString()) },
             };
 
             var emailToSend = new Email

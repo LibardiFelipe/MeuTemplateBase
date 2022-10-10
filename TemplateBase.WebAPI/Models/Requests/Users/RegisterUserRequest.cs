@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 
 namespace TemplateBase.WebAPI.Models.Requests.Users
 {
@@ -8,6 +9,6 @@ namespace TemplateBase.WebAPI.Models.Requests.Users
         public string Email { get; set; }
         public string Password { get; set; }
         public DateTime BirthDate { get; set; }
-        // public IFormFile ProfilePicture { get; set; }
+        public IFormFile ProfilePicture { get; set; }
     }
 }
