@@ -81,6 +81,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<ITemplateEmailService, TemplateEmailService>();
+builder.Services.AddScoped<IStorageService, StorageService>();
 
 //#if(EnableSwaggerSupport)
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
