@@ -11,13 +11,36 @@ using TemplateBase.Infrastructure.Persistence.Contexts;
 namespace TemplateBase.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220908212755_MigrationInicial")]
-    partial class MigrationInicial
+    [Migration("20221009002248_TemplateEmailAdded")]
+    partial class TemplateEmailAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
+
+            modelBuilder.Entity("TemplateBase.Domain.Entities.TemplateEmail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TemplateEmail", (string)null);
+                });
 
             modelBuilder.Entity("TemplateBase.Domain.Entities.User", b =>
                 {
@@ -25,13 +48,22 @@ namespace TemplateBase.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("BirthDate")
+                    b.Property<DateTime>("BirthDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LockReason")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -40,11 +72,11 @@ namespace TemplateBase.Infrastructure.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("TEXT");
 
-                    b.Property<byte?>("Permission")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("ProfilePictureUrl")
                         .HasColumnType("TEXT");
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");

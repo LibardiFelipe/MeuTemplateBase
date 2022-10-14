@@ -79,6 +79,15 @@ namespace TemplateBase.Domain.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a É necessário confirmar o seu email antes de se contectar..
+        /// </summary>
+        public static string ConfirmacaoEmailPendente {
+            get {
+                return ResourceManager.GetString("ConfirmacaoEmailPendente", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O email informado já se encontra cadastrado..
         /// </summary>
         public static string EmailJaExistente {
@@ -102,6 +111,24 @@ namespace TemplateBase.Domain.Resources {
         public static string Entidade_IdentificadorInvalido {
             get {
                 return ResourceManager.GetString("Entidade_IdentificadorInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não foi possível encontrar a {0} especificada..
+        /// </summary>
+        public static string EntidadeNaoEncontrada {
+            get {
+                return ResourceManager.GetString("EntidadeNaoEncontrada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não foi possível encontrar o {0} especificado..
+        /// </summary>
+        public static string EntidadeNaoEncontrado {
+            get {
+                return ResourceManager.GetString("EntidadeNaoEncontrado", resourceCulture);
             }
         }
         
@@ -165,6 +192,15 @@ namespace TemplateBase.Domain.Resources {
         public static string Service_InternalError {
             get {
                 return ResourceManager.GetString("Service_InternalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Sua conta foi bloqueada pelo seguinte motivo: {0}.
+        /// </summary>
+        public static string UsuarioBloqueado {
+            get {
+                return ResourceManager.GetString("UsuarioBloqueado", resourceCulture);
             }
         }
     }
