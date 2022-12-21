@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,77 +12,78 @@ using TemplateBase.Infrastructure.Specification;
 
 namespace TemplateBase.Infrastructure.Repository
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity
+    public class GenericRepository<T> : IGenericRepository<T> where T : Entity
     {
-        private readonly DbSet<TEntity> _dbSet;
+        private readonly DbSet<T> _dbSet;
 
         public GenericRepository(DataContext context)
         {
-            _dbSet = context.Set<TEntity>();
+            _dbSet = context.Set<T>();
         }
 
-        public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
+        public async Task AddAsync(T entity, CancellationToken cancellationToken)
         {
             await _dbSet.AddAsync(entity, cancellationToken);
         }
 
-        public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken)
+        public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
         {
             await _dbSet.AddRangeAsync(entities, cancellationToken);
         }
 
-        public void Update(TEntity entity)
+        public async Task<bool> ContainsAsync(Guid id, CancellationToken cancellationToken)
         {
-            if (entity.HasChanged is false)
-                return;
-
-            entity.SetNewUpdatedAt();
-            _dbSet.Update(entity);
+            return await _dbSet.AnyAsync(x => x.Id == id, cancellationToken);
         }
 
-        public void UpdateRange(IEnumerable<TEntity> entities)
+        public async Task<bool> ContainsAsync(Expression<Func<T, bool>> criteria, CancellationToken cancellationToken)
         {
-            var changed = new List<TEntity>();
-            foreach (var entity in entities)
-            {
-                if (entity.HasChanged)
-                {
-                    entity.SetNewUpdatedAt();
-                    changed.Add(entity);
-                }
-            }
-
-            _dbSet.UpdateRange(changed);
+            return await _dbSet.AnyAsync(criteria, cancellationToken);
         }
 
-        public void Delete(TEntity entity)
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            _dbSet.Remove(entity);
+            throw new NotImplementedException();
         }
 
-        public void DeleteRange(IEnumerable<TEntity> entities)
+        public async Task DeleteRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
         {
-            _dbSet.RemoveRange(entities);
+            throw new NotImplementedException();
         }
 
-        public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> criteria, CancellationToken cancellationToken)
         {
-            return await _dbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await _dbSet.Where(criteria).ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+        public async Task<IEnumerable<T>> GetAllAsync(ISpecification<T> specification, CancellationToken cancellationToken)
         {
-            return await SpecificationEvaluator<TEntity>.ApplySpecification(_dbSet.AsQueryable(), specification).ToListAsync(cancellationToken);
+            return await SpecificationEvaluator<T>.ApplySpecification(_dbSet.AsQueryable(), specification).ToListAsync(cancellationToken);
         }
 
-        public async Task<bool> ContainsAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+        public async Task<T?> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await SpecificationEvaluator<TEntity>.ApplySpecification(_dbSet.AsQueryable(), specification).AnyAsync(cancellationToken);
+            return await _dbSet.Where(x => x.Id == id).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<bool> ContainsAsync(Expression<Func<TEntity, bool>> criteria, CancellationToken cancellationToken)
+        public async Task<T?> GetAsync(Expression<Func<T, bool>> criteria, CancellationToken cancellationToken)
         {
-            return await SpecificationEvaluator<TEntity>.ApplySpecification(_dbSet.AsQueryable(), criteria).AnyAsync(cancellationToken);
+            return await _dbSet.FirstOrDefaultAsync(criteria, cancellationToken);
+        }
+
+        public async Task<T?> GetAsync(ISpecification<T> specification, CancellationToken cancellationToken)
+        {
+            return await SpecificationEvaluator<T>.ApplySpecification(_dbSet.AsQueryable(), specification).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

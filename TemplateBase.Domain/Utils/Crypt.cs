@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
-using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -38,9 +37,8 @@ namespace TemplateBase.Domain.Utils
 
                 return WebEncoders.Base64UrlEncode(array);
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
                 return "";
             }
         }
@@ -70,9 +68,8 @@ namespace TemplateBase.Domain.Utils
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
                 return "";
             }
         }

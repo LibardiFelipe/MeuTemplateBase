@@ -4,6 +4,7 @@
     {
         Basic = 1,
         VIP = 2,
-        Admin = 3
+        Moderator = 3,
+        Admin = 4,
     }
 }

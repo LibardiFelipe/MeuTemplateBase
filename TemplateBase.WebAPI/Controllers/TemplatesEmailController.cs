@@ -6,15 +6,14 @@ using System;
 using System.Threading.Tasks;
 using TemplateBase.Application.Commands.TemplatesEmail;
 using TemplateBase.Application.Queries.TemplatesEmail;
-using TemplateBase.Application.Queries.Users;
 using TemplateBase.WebAPI.Models.Requests.TemplatesEmail;
 using TemplateBase.WebAPI.Models.ViewModels;
 
 namespace TemplateBase.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class TemplatesEmailController : ControllerBase
     {
         private readonly IMediator _mediator;

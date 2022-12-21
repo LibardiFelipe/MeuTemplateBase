@@ -9,7 +9,7 @@ using TemplateBase.Domain.Resources;
 
 namespace TemplateBase.Application.Queries.Base
 {
-    public abstract class Query<TEntity> : Notifiable<Notification>, IRequest<Result> where TEntity : Entity
+    public abstract class Query<T> : Notifiable<Notification>, IRequest<Result> where T : Entity
     {
         protected Guid? _id = null;
 
@@ -18,12 +18,12 @@ namespace TemplateBase.Application.Queries.Base
         public Query(string id)
         {
             if (Guid.TryParse(id, out var guidId) is false)
-                AddNotification("", DefaultMessages.Entidade_IdentificadorInvalido);
+                AddNotification("", Mensagens.Entidade_IdentificadorInvalido);
 
             _id = guidId;
         }
 
-        public abstract ISpecification<TEntity> ToSpecification();
+        public abstract ISpecification<T> ToSpecification();
         public bool IsInvalid() => Notifications.Any();
         public abstract void Validate();
     }

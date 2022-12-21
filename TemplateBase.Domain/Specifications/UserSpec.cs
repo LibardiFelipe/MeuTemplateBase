@@ -29,12 +29,6 @@ namespace TemplateBase.Domain.Specifications
             return this;
         }
 
-        public UserSpec FilterByBirthDate(DateTime value)
-        {
-            CriteriaAnd(x => x.BirthDate == value.Date);
-            return this;
-        }
-
         public static UserSpec From(Expression<Func<User, bool>> criteria) => new(criteria);
     }
 }

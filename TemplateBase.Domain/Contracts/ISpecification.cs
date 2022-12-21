@@ -4,11 +4,11 @@ using System.Linq.Expressions;
 
 namespace TemplateBase.Domain.Contracts
 {
-    public interface ISpecification<TEntity>
+    public interface ISpecification<T>
     {
-        Expression<Func<TEntity, bool>> Criteria { get; }
-        List<Expression<Func<TEntity, object>>> Includes { get; }
-        Expression<Func<TEntity, object>> OrderByAscend { get; }
-        Expression<Func<TEntity, object>> OrderByDescend { get; }
+        Expression<Func<T, bool>> Criteria { get; }
+        List<Expression<Func<T, object>>> Includes { get; }
+        Expression<Func<T, object>> OrderByAscend { get; }
+        Expression<Func<T, object>> OrderByDescend { get; }
     }
 }

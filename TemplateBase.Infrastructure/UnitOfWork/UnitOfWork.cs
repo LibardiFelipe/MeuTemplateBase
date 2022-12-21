@@ -22,9 +22,7 @@ namespace TemplateBase.Infrastructure.UnitOfWork
         public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : Entity
         {
             if (Repositories.ContainsKey(typeof(TEntity)) == true)
-            {
-                return Repositories[typeof(TEntity)] as IGenericRepository<TEntity>;
-            }
+                return (Repositories[typeof(TEntity)] as IGenericRepository<TEntity>)!;
 
             IGenericRepository<TEntity> repo = new GenericRepository<TEntity>(_dbContext);
             Repositories.Add(typeof(TEntity), repo);

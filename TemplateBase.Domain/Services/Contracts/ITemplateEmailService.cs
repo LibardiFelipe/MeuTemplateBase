@@ -7,8 +7,8 @@ namespace TemplateBase.Domain.Services.Contracts
 {
     public interface ITemplateEmailService : IService
     {
-        Task<TemplateEmail> CreateTemplateEmailAsync(string name, string body, CancellationToken cancellationToken);
-        Task<TemplateEmail> UpdateTemplateEmailAsync(Guid id, string name, string body, CancellationToken cancellationToken);
+        Task<TemplateEmail?> CreateTemplateEmailAsync(string name, string body, CancellationToken cancellationToken);
+        Task<TemplateEmail?> UpdateTemplateEmailAsync(Guid id, string name, string body, CancellationToken cancellationToken);
         Task<bool> DeleteTemplateEmailAsync(Guid id, CancellationToken cancellationToken);
     }
 }

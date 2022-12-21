@@ -3,26 +3,31 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>false</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Flunt" Version="2.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\DefaultMessages.Designer.cs">
+    <Compile Update="Resources\Mensagens.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>DefaultMessages.resx</DependentUpon>
+      <DependentUpon>Mensagens.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\DefaultMessages.resx">
+    <EmbeddedResource Update="Resources\Mensagens.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>DefaultMessages.Designer.cs</LastGenOutput>
+      <LastGenOutput>Mensagens.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

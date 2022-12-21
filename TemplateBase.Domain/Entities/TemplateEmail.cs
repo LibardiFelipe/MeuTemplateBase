@@ -8,7 +8,7 @@ namespace TemplateBase.Domain.Entities
     public class TemplateEmail : Entity
     {
         public TemplateEmail() { }
-        public TemplateEmail(string name, string body)
+        public TemplateEmail(string name, string body, string? id = null) : base(id)
         {
             ChangeName(name, true);
             ChangeBody(body, true);
@@ -25,9 +25,8 @@ namespace TemplateBase.Domain.Entities
             Name = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNullOrWhiteSpace(Name, "Name", string.Format(DefaultMessages.CampoObrigatorio, "Nome")));
+                .IsNotNullOrWhiteSpace(Name, "Name", string.Format(Mensagens.CampoObrigatorio, "Nome")));
 
-            FlagAsChanged();
             return this;
         }
 
@@ -39,9 +38,8 @@ namespace TemplateBase.Domain.Entities
             Body = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNullOrWhiteSpace(Body, "Body", string.Format(DefaultMessages.CampoObrigatorio, "Corpo")));
+                .IsNotNullOrWhiteSpace(Body, "Body", string.Format(Mensagens.CampoObrigatorio, "Corpo")));
 
-            FlagAsChanged();
             return this;
         }
     }

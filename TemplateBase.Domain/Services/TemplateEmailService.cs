@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
 using TemplateBase.Domain.Resources;
@@ -21,7 +20,7 @@ namespace TemplateBase.Domain.Services
             _uow = uow;
         }
 
-        public async Task<TemplateEmail> CreateTemplateEmailAsync(string name, string body, CancellationToken cancellationToken)
+        public async Task<TemplateEmail?> CreateTemplateEmailAsync(string name, string body, CancellationToken cancellationToken)
         {
             var repo = _uow.Repository<TemplateEmail>();
 
@@ -35,33 +34,32 @@ namespace TemplateBase.Domain.Services
             if (await _uow.CommitAsync(cancellationToken) > 0)
                 return entity;
 
-            AddNotification("", DefaultMessages.Service_InternalError);
+            AddNotification("", Mensagens.Service_InternalError);
             return null;
         }
 
-        public async Task<TemplateEmail> UpdateTemplateEmailAsync(Guid id, string name, string body, CancellationToken cancellationToken)
+        public async Task<TemplateEmail?> UpdateTemplateEmailAsync(Guid id, string name, string body, CancellationToken cancellationToken)
         {
             var repo = _uow.Repository<TemplateEmail>();
 
-            var entity = await repo.GetByIdAsync(id, cancellationToken);
+            var entity = await repo.GetAsync(id, cancellationToken);
             if (entity is null)
             {
-                AddNotification("Id", string.Format(DefaultMessages.EntidadeNaoEncontrado, "Template"));
+                AddNotification("Id", string.Format(Mensagens.EntidadeNaoEncontrado, "Template"));
                 return null;
             }
 
-            entity.ChangeBody(body)
-                .ChangeName(name);
+            entity.ChangeBody(body).ChangeName(name);
             AddNotifications(entity);
 
             if (Notifications.Any())
                 return null;
 
-            repo.Update(entity);
+            await repo.UpdateAsync(entity, cancellationToken);
             if (await _uow.CommitAsync(cancellationToken) > 0)
                 return entity;
 
-            AddNotification("", DefaultMessages.Service_InternalError);
+            AddNotification("", Mensagens.Service_InternalError);
             return null;
         }
 
@@ -69,18 +67,17 @@ namespace TemplateBase.Domain.Services
         {
             var repo = _uow.Repository<TemplateEmail>();
 
-            var entity = await repo.GetByIdAsync(id, cancellationToken);
-            if (entity is null)
+            if (await repo.ContainsAsync(id, cancellationToken) is false)
             {
-                AddNotification("Id", string.Format(DefaultMessages.EntidadeNaoEncontrado, "Template"));
+                AddNotification("Id", string.Format(Mensagens.EntidadeNaoEncontrado, "Template"));
                 return false;
             }
 
-            repo.Delete(entity);
+            await repo.DeleteAsync(id, cancellationToken);
             if (await _uow.CommitAsync(cancellationToken) > 0)
                 return true;
 
-            AddNotification("", DefaultMessages.Service_InternalError);
+            AddNotification("", Mensagens.Service_InternalError);
             return false;
         }
 

@@ -1,50 +1,34 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using TemplateBase.Application.Commands.Auth;
 using TemplateBase.Application.Commands.Base;
 using TemplateBase.Application.Models;
 using TemplateBase.Domain.Resources;
 using TemplateBase.Domain.Services.Contracts;
 
-namespace TemplateBase.Application.Commands.Persons
+namespace TemplateBase.Application.Commands.Users
 {
     public class UserCommandHandler : CommandHandler,
-        IRequestHandler<RegisterUserCommand, Result>,
-        IRequestHandler<VerifyUserCommand, Result>
+        IRequestHandler<SetupUserCommand, Result>
     {
-        private readonly IUserService _userService;
+        private readonly IUserService _userServices;
 
-        public UserCommandHandler(IUserService userService)
+        public UserCommandHandler(IUserService userServices)
         {
-            _userService = userService;
+            _userServices = userServices;
         }
 
-        public async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(SetupUserCommand request, CancellationToken cancellationToken)
         {
             if (request.IsInvalid())
-                return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
+                return new Result(Mensagens.Handler_ComandoInvalido, false, request.Notifications);
 
-            var entity = await _userService.RegisterUserAsync(request.Name, request.Email,
-                request.Password, request.BirthDate, request.ProfilePicture, cancellationToken);
+            var entity = await _userServices.SetupUserAsync(request.Claims, cancellationToken);
 
-            if (_userService.IsInvalid())
-                return new Result(DefaultMessages.Handler_FalhaAoExecutarComando, false, _userService.GetNotifications());
+            if (_userServices.IsInvalid())
+                return new Result(Mensagens.Handler_FalhaAoExecutarComando, false, _userServices.GetNotifications());
 
-            return new Result(DefaultMessages.Handler_ComandoExecutado, true, entity);
-        }
-
-        public async Task<Result> Handle(VerifyUserCommand request, CancellationToken cancellationToken)
-        {
-            if (request.IsInvalid())
-                return new Result(DefaultMessages.Handler_ComandoInvalido, false, request.Notifications);
-
-            var entity = await _userService.VerifyUserAsync(request.Hash, cancellationToken);
-
-            if (_userService.IsInvalid())
-                return new Result(DefaultMessages.Handler_FalhaAoExecutarComando, false, _userService.GetNotifications());
-
-            return new Result(DefaultMessages.Handler_ComandoExecutado, true, entity);
+            return new Result(Mensagens.Handler_ComandoExecutado, true, entity);
         }
     }
 }

@@ -7,19 +7,19 @@ using TemplateBase.Domain.Entities.Base;
 
 namespace TemplateBase.Infrastructure.Specification
 {
-    public class SpecificationEvaluator<TEntity> where TEntity : Entity
+    public class SpecificationEvaluator<T> where T : Entity
     {
-        public static IQueryable<TEntity> ApplySpecification(IQueryable<TEntity> dbQuery, ISpecification<TEntity> specification)
+        public static IQueryable<T> ApplySpecification(IQueryable<T> dbQuery, ISpecification<T> specification)
         {
             return GetQuery(dbQuery, specification);
         }
 
-        public static IQueryable<TEntity> ApplySpecification(IQueryable<TEntity> dbQuery, Expression<Func<TEntity, bool>> criteria)
+        public static IQueryable<T> ApplySpecification(IQueryable<T> dbQuery, Expression<Func<T, bool>> criteria)
         {
             return GetQuery(dbQuery, criteria);
         }
 
-        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> specification)
+        public static IQueryable<T> GetQuery(IQueryable<T> inputQuery, ISpecification<T> specification)
         {
             var query = inputQuery;
 
@@ -38,7 +38,7 @@ namespace TemplateBase.Infrastructure.Specification
             return query;
         }
 
-        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, Expression<Func<TEntity, bool>> criteria)
+        public static IQueryable<T> GetQuery(IQueryable<T> inputQuery, Expression<Func<T, bool>> criteria)
         {
             var query = inputQuery;
 
