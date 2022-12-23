@@ -123,15 +123,6 @@
   <data name="CampoObrigatorio" xml:space="preserve">
     <value>O campo de {0} é obrigatório.</value>
   </data>
-  <data name="ConfirmacaoEmailPendente" xml:space="preserve">
-    <value>É necessário confirmar o seu email antes de se contectar.</value>
-  </data>
-  <data name="EmailJaExistente" xml:space="preserve">
-    <value>O email informado já se encontra cadastrado.</value>
-  </data>
-  <data name="EmailOuSenhaIncorretos" xml:space="preserve">
-    <value>Email e/ou senha incorreto(s)!</value>
-  </data>
   <data name="EntidadeNaoEncontrada" xml:space="preserve">
     <value>Não foi possível encontrar a {0} especificada.</value>
   </data>

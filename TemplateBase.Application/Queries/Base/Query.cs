@@ -9,9 +9,13 @@ using TemplateBase.Domain.Resources;
 
 namespace TemplateBase.Application.Queries.Base
 {
-    public abstract class Query<T> : Notifiable<Notification>, IRequest<Result> where T : Entity
+    public abstract class Query<TQuery, TEntity> : Notifiable<Notification>, IRequest<Result> where TEntity : Entity where TQuery : Query<TQuery, TEntity>
     {
         protected Guid? _id = null;
+        protected DateTime? _createdAtStart = null;
+        protected DateTime? _createdAtEnd = null;
+        protected DateTime? _updatedAtStart = null;
+        protected DateTime? _updatedAtEnd = null;
 
         public Query() { }
 
@@ -23,7 +27,21 @@ namespace TemplateBase.Application.Queries.Base
             _id = guidId;
         }
 
-        public abstract ISpecification<T> ToSpecification();
+        public TQuery FilterByRangeCreation(DateTime? startDate, DateTime? endDate)
+        {
+            _createdAtStart = startDate;
+            _createdAtEnd = endDate;
+            return (TQuery)this;
+        }
+
+        public TQuery FilterByRangeUpdate(DateTime? startDate, DateTime? endDate)
+        {
+            _updatedAtStart = startDate;
+            _updatedAtEnd = endDate;
+            return (TQuery)this;
+        }
+
+        public abstract ISpecification<TEntity> ToSpecification();
         public bool IsInvalid() => Notifications.Any();
         public abstract void Validate();
     }

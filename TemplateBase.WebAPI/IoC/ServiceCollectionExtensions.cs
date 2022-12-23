@@ -26,10 +26,9 @@ namespace TemplateBase.WebAPI.IoC
         {
             service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             
-            service.AddMediatR(typeof(Query<>).Assembly, typeof(QueryHandler).Assembly);
+            service.AddMediatR(typeof(Query<,>).Assembly, typeof(QueryHandler).Assembly);
             service.AddMediatR(typeof(Command).Assembly, typeof(CommandHandler).Assembly);
             
-            service.AddScoped<ITemplateEmailService, TemplateEmailService>();
             service.AddScoped<IStorageService, StorageService>();
             service.AddScoped<IUserService, UserService>();
 

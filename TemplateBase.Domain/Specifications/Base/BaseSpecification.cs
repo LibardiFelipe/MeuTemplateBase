@@ -43,6 +43,18 @@ namespace TemplateBase.Domain.Specifications.Base
             return (TImplementation)this;
         }
 
+        public virtual TImplementation FilterByRangeCreation(DateTime start, DateTime end)
+        {
+            CriteriaAnd((T x) => x.CreatedAt.Date >= start.Date && x.CreatedAt.Date <= end.Date);
+            return (TImplementation)this;
+        }
+        
+        public virtual TImplementation FilterByRangeUpdate(DateTime start, DateTime end)
+        {
+            CriteriaAnd((T x) =>  x.UpdatedAt.HasValue ? (x.UpdatedAt.Value.Date >= start.Date && x.UpdatedAt.Value.Date <= end) : false);
+            return (TImplementation)this;
+        }
+
         protected virtual TImplementation CriteriaAnd(Expression<Func<T, bool>> criteria)
         {
             if (Criteria is not null)
