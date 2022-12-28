@@ -7,7 +7,7 @@ using TemplateBase.Domain.Entities.Base;
 
 namespace TemplateBase.Infrastructure.Specification
 {
-    public class SpecificationEvaluator<T> where T : Entity
+    public class SpecificationEvaluator<T> : ISpecificationEvaluator<T> where T : Entity
     {
         public static IQueryable<T> ApplySpecification(IQueryable<T> dbQuery, ISpecification<T> specification)
         {
