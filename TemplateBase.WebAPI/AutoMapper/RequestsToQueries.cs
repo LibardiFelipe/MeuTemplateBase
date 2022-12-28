@@ -15,8 +15,8 @@ namespace TemplateBase.WebAPI.AutoMapper
                     .FilterByName(src.Name)
                     .FilterByEmail(src.Email)
                     .FilterByType(src.Type)
-                    .FilterByRangeCreation(src.CreatedAtStart, src.CreatedAtEnd)
-                    .FilterByRangeUpdate(src.UpdatedAtStart, src.UpdatedAtEnd);
+                    .FilterByCreationRange(src.CreatedAtStart, src.CreatedAtEnd)
+                    .FilterByUpdateRange(src.UpdatedAtStart, src.UpdatedAtEnd);
                 })
                 .IgnoreAllPropertiesWithAnInaccessibleSetter()
                 .AfterMap((_, src) => src.Validate());

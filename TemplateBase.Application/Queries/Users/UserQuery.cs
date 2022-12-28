@@ -49,10 +49,10 @@ namespace TemplateBase.Application.Queries.Users
                 spec.FilterById(_id.Value);
 
             if (_createdAtStart.HasValue && _createdAtEnd.HasValue)
-                spec.FilterByRangeCreation(_createdAtStart.Value, _createdAtEnd.Value);
+                spec.FilterByCreationRange(_createdAtStart.Value, _createdAtEnd.Value);
 
             if (_updatedAtStart.HasValue && _updatedAtEnd.HasValue)
-                spec.FilterByRangeUpdate(_updatedAtStart.Value, _updatedAtEnd.Value);
+                spec.FilterByUpdateRange(_updatedAtStart.Value, _updatedAtEnd.Value);
 
             if (!string.IsNullOrWhiteSpace(_name))
                 spec.FilterByName(_name);

@@ -27,14 +27,14 @@ namespace TemplateBase.Application.Queries.Base
             _id = guidId;
         }
 
-        public TQuery FilterByRangeCreation(DateTime? startDate, DateTime? endDate)
+        public TQuery FilterByCreationRange(DateTime? startDate, DateTime? endDate)
         {
             _createdAtStart = startDate;
             _createdAtEnd = endDate;
             return (TQuery)this;
         }
 
-        public TQuery FilterByRangeUpdate(DateTime? startDate, DateTime? endDate)
+        public TQuery FilterByUpdateRange(DateTime? startDate, DateTime? endDate)
         {
             _updatedAtStart = startDate;
             _updatedAtEnd = endDate;

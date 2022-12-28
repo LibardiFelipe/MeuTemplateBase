@@ -43,15 +43,15 @@ namespace TemplateBase.Domain.Specifications.Base
             return (TImplementation)this;
         }
 
-        public virtual TImplementation FilterByRangeCreation(DateTime start, DateTime end)
+        public virtual TImplementation FilterByCreationRange(DateTime start, DateTime end)
         {
             CriteriaAnd((T x) => x.CreatedAt.Date >= start.Date && x.CreatedAt.Date <= end.Date);
             return (TImplementation)this;
         }
         
-        public virtual TImplementation FilterByRangeUpdate(DateTime start, DateTime end)
+        public virtual TImplementation FilterByUpdateRange(DateTime start, DateTime end)
         {
-            CriteriaAnd((T x) =>  x.UpdatedAt.HasValue ? (x.UpdatedAt.Value.Date >= start.Date && x.UpdatedAt.Value.Date <= end) : false);
+            CriteriaAnd((T x) =>  x.UpdatedAt.HasValue && (x.UpdatedAt.Value.Date >= start.Date && x.UpdatedAt.Value.Date <= end));
             return (TImplementation)this;
         }
 
