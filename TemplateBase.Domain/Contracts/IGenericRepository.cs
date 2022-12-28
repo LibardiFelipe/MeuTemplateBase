@@ -11,6 +11,7 @@ namespace TemplateBase.Domain.Contracts
     {
         Task<bool> ContainsAsync(Guid id, CancellationToken cancellationToken);
         Task<bool> ContainsAsync(Expression<Func<T, bool>> criteria, CancellationToken cancellationToken);
+        Task<bool> ContainsAsync(ISpecification<T> specification, CancellationToken cancellationToken);
 
         Task<T?> GetAsync(Guid id, CancellationToken cancellationToken);
         Task<T?> GetAsync(Expression<Func<T, bool>> criteria, CancellationToken cancellationToken);
@@ -22,10 +23,12 @@ namespace TemplateBase.Domain.Contracts
         Task AddAsync(T entity, CancellationToken cancellationToken);
         Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
 
-        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
-        Task DeleteRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+        Task Delete(Guid id, CancellationToken cancellationToken);
+        void Delete(T entity);
+        Task DeleteRange(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+        void DeleteRange(IEnumerable<T> entities);
 
-        Task UpdateAsync(T entity, CancellationToken cancellationToken);
-        Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
+        void Update(T entity);
+        void UpdateRange(IEnumerable<T> entities);
     }
 }

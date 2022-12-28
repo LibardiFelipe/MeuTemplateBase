@@ -41,14 +41,34 @@ namespace TemplateBase.Infrastructure.Repository
             return await _dbSet.AnyAsync(criteria, cancellationToken);
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> ContainsAsync(ISpecification<T> specification, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await SpecificationEvaluator<T>.ApplySpecification(_dbSet.AsQueryable(), specification).AnyAsync(cancellationToken);
         }
 
-        public async Task DeleteRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
+        public void Delete(T entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Remove(entity);
+        }
+
+        public async Task Delete(Guid id, CancellationToken cancellationToken)
+        {
+            var entity = await GetAsync(id, cancellationToken);
+
+            if (entity is not null)
+                _dbSet.Remove(entity);
+        }
+
+        public async Task DeleteRange(IEnumerable<Guid> ids, CancellationToken cancellationToken)
+        {
+            var entities = await GetAllAsync(x => ids.Contains(x.Id), cancellationToken);
+            foreach (var entity in entities)
+                Delete(entity);
+        }
+
+        public void DeleteRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> criteria, CancellationToken cancellationToken)
@@ -76,14 +96,18 @@ namespace TemplateBase.Infrastructure.Repository
             return await SpecificationEvaluator<T>.ApplySpecification(_dbSet.AsQueryable(), specification).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
+        public void Update(T entity)
         {
-            throw new NotImplementedException();
+            entity.SetNewUpdatedAt();
+            _dbSet.Update(entity);
         }
 
-        public async Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
+        public void UpdateRange(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            foreach (var entity in entities)
+                entity.SetNewUpdatedAt();
+
+            _dbSet.UpdateRange(entities);
         }
     }
 }
