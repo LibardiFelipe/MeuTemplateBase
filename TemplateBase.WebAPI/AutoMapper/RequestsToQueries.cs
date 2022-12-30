@@ -14,7 +14,7 @@ namespace TemplateBase.WebAPI.AutoMapper
                     return new UserQuery()
                     .FilterByName(src.Name)
                     .FilterByEmail(src.Email)
-                    .FilterByType(src.Type)
+                    .FilterByRole(src.Role)
                     .FilterByCreationRange(src.CreatedAtStart, src.CreatedAtEnd)
                     .FilterByUpdateRange(src.UpdatedAtStart, src.UpdatedAtEnd);
                 })

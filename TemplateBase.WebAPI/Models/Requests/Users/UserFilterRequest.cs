@@ -7,6 +7,6 @@ namespace TemplateBase.WebAPI.Models.Requests.Users
     {
         public string? Name { get; set; }
         public string? Email { get; set; }
-        public EUserType? Type { get; set; }
+        public EUserRole? Role { get; set; }
     }
 }

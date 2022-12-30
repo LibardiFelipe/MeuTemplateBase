@@ -11,8 +11,8 @@ using TemplateBase.Infrastructure.Persistence.Contexts;
 namespace TemplateBase.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221222232056_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20221230000448_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace TemplateBase.Infrastructure.Migrations
                     b.Property<string>("ProfilePictureUrl")
                         .HasColumnType("longtext");
 
-                    b.Property<byte>("Type")
+                    b.Property<byte>("Role")
                         .HasColumnType("tinyint unsigned");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -60,7 +60,7 @@ namespace TemplateBase.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 #pragma warning restore 612, 618
         }

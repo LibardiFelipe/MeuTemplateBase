@@ -49,7 +49,7 @@ namespace TemplateBase.Infrastructure.Migrations
                     b.Property<string>("ProfilePictureUrl")
                         .HasColumnType("longtext");
 
-                    b.Property<byte>("Type")
+                    b.Property<byte>("Role")
                         .HasColumnType("tinyint unsigned");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -57,7 +57,7 @@ namespace TemplateBase.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 #pragma warning restore 612, 618
         }

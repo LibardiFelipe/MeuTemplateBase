@@ -23,6 +23,7 @@ namespace TemplateBase.Domain.Entities
             ChangeProfilePictureUrl(profilePictureUrl, true);
             ChangeType(EUserType.Basic, true);
             ChangeIsLocked(false, true);
+            Role = EUserRole.Customer;
         }
         #endregion
 
@@ -31,7 +32,7 @@ namespace TemplateBase.Domain.Entities
         public string Name { get; private set; }
         public string Email { get; private set; }
         public string? ProfilePictureUrl { get; private set; }
-        public EUserType Type { get; private set; }
+        public EUserRole Role { get; private set; }
         public bool IsLocked { get; private set; }
         public string? LockReason { get; private set; }
         #endregion
@@ -54,29 +55,6 @@ namespace TemplateBase.Domain.Entities
             AddNotifications(new Contract<Notification>()
                 .Requires()
                 .IsNotNullOrWhiteSpace(Name, "Name", string.Format(Mensagens.CampoObrigatorio, "Nome")));
-
-            return this;
-        }
-
-        public User ChangeIsLocked(bool value, bool fromConstructor = false)
-        {
-            if (!fromConstructor && IsLocked.Equals(value))
-                return this;
-
-            IsLocked = value;
-
-            return this;
-        }
-
-        public User ChangeLockReason(string value, bool fromConstructor = false)
-        {
-            if (!fromConstructor && (LockReason?.Equals(value) ?? false))
-                return this;
-
-            LockReason = value;
-            AddNotifications(new Contract<Notification>()
-                .Requires()
-                .IsNotNullOrWhiteSpace(LockReason, "LockReason", string.Format(Mensagens.CampoObrigatorio, "Motivo")));
 
             return this;
         }
