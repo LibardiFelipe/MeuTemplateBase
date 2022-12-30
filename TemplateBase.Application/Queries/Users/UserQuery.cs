@@ -12,7 +12,7 @@ namespace TemplateBase.Application.Queries.Users
         #region Membros privados
         private string? _name = null;
         private string? _email = null;
-        private EUserType? _type = null;
+        private EUserRole? _role = null;
         #endregion
 
         #region Construtores
@@ -33,9 +33,9 @@ namespace TemplateBase.Application.Queries.Users
             return this;
         }
 
-        public UserQuery FilterByType(EUserType? value)
+        public UserQuery FilterByRole(EUserRole? value)
         {
-            _type = value;
+            _role = value;
             return this;
         }
         #endregion
@@ -60,8 +60,8 @@ namespace TemplateBase.Application.Queries.Users
             if (!string.IsNullOrWhiteSpace(_email))
                 spec.FilterByEmail(_email);
 
-            if (_type.HasValue)
-                spec.FilterByType(_type.Value);
+            if (_role.HasValue)
+                spec.FilterByRole(_role.Value);
 
             return spec;
         }
