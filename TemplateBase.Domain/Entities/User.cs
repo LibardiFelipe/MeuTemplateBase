@@ -1,8 +1,15 @@
-﻿using Flunt.Notifications;
+﻿using FirebaseAdmin.Auth;
+using FirebaseAdmin;
+using Flunt.Notifications;
 using Flunt.Validations;
+using Google.Apis.Auth.OAuth2;
+using System.Collections.Generic;
+using System.Threading;
 using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Domain.Enumerators;
 using TemplateBase.Domain.Resources;
+using System.Threading.Tasks;
+using System;
 
 namespace TemplateBase.Domain.Entities
 {
@@ -21,8 +28,8 @@ namespace TemplateBase.Domain.Entities
             ChangeName(name, true);
             ChangeEmail(email, true);
             ChangeProfilePictureUrl(profilePictureUrl, true);
-            ChangeType(EUserType.Basic, true);
-            ChangeIsLocked(false, true);
+
+            IsLocked = false;
             Role = EUserRole.Customer;
         }
         #endregion
@@ -85,14 +92,36 @@ namespace TemplateBase.Domain.Entities
             return this;
         }
 
-        public User ChangeType(EUserType value, bool fromConstructor = false)
+        public async Task ChangeRole(EUserRole value, CancellationToken cancellationToken)
         {
-            if (!fromConstructor && Type.Equals(value))
-                return this;
+            if (Role.Equals(value))
+                return;
 
-            Type = value;
+            Role = value;
+            await SetCustomClaim(this, cancellationToken);
+        }
 
-            return this;
+        private async Task SetCustomClaim(User user, CancellationToken cancellationToken)
+        {
+            try
+            {
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile("path/to/serviceAccountKey.json"),
+                });
+
+                var auth = FirebaseAuth.DefaultInstance;
+                var customClaims = new Dictionary<string, object>()
+                {
+                    { "role", $"{user.Role}" }
+                };
+
+                await auth.SetCustomUserClaimsAsync(user.FirebaseId, customClaims, cancellationToken);
+            }
+            catch (Exception x)
+            {
+                AddNotification("Role", x.Message);
+            }
         }
         #endregion
     }
