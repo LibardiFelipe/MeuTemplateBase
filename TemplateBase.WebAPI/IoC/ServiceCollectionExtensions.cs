@@ -1,5 +1,9 @@
-﻿using MediatR;
+﻿using Google.Apis.Util;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Text.RegularExpressions;
@@ -9,6 +13,7 @@ using TemplateBase.Application.Queries.Base;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Services;
 using TemplateBase.Domain.Services.Contracts;
+using TemplateBase.Infrastructure.Persistence.Contexts;
 using TemplateBase.Infrastructure.UnitOfWork;
 
 namespace TemplateBase.WebAPI.IoC
@@ -17,6 +22,23 @@ namespace TemplateBase.WebAPI.IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection service)
         {
+            /* Database context */
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
+            service.AddDbContext<DataContext>(
+                (serviceProvider, dbContextOptions) =>
+                {
+                    var configuration = serviceProvider.GetService<IConfiguration>();
+                    var connectionString = configuration!.GetConnectionString("DefaultConnection");
+                    connectionString.ThrowIfNullOrEmpty("ConnectionString (DefaultConnection)");
+
+                    dbContextOptions
+                    .UseMySql(connectionString, serverVersion)
+                    .LogTo(Console.WriteLine, LogLevel.Information)
+                    .EnableSensitiveDataLogging()
+                    .EnableDetailedErrors();
+                }
+            );
+
             service.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return service;
