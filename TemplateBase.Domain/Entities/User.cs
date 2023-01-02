@@ -1,15 +1,16 @@
-﻿using FirebaseAdmin.Auth;
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
+using FirebaseAdmin.Auth;
 using Flunt.Notifications;
 using Flunt.Validations;
 using Google.Apis.Auth.OAuth2;
+using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
+using TemplateBase.Domain.Classes;
 using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Domain.Enumerators;
 using TemplateBase.Domain.Resources;
-using System.Threading.Tasks;
-using System;
 
 namespace TemplateBase.Domain.Entities
 {
@@ -91,36 +92,89 @@ namespace TemplateBase.Domain.Entities
 
             return this;
         }
+        #endregion
 
+        #region Métodos públicos
         public async Task ChangeRole(EUserRole value, CancellationToken cancellationToken)
         {
             if (Role.Equals(value))
                 return;
 
             Role = value;
-            await SetCustomClaim(this, cancellationToken);
-        }
+            var claim = new NewClaim("role", $"{Role}");
+            AddNotifications(claim);
 
-        private async Task SetCustomClaim(User user, CancellationToken cancellationToken)
+            AddNotifications(new Contract<Notification>()
+                .Requires()
+                .IsBetween((byte)Role, (byte)EUserRole.Customer, (byte)EUserRole.Admin, "Role", "A role adicionada não é válida!"));
+
+            if (IsInvalid())
+                return;
+
+            await SetCustomClaim(FirebaseId, claim, cancellationToken);
+        }
+        #endregion
+
+        #region Métodos privados
+        private async Task SetCustomClaim(string firebaseId, NewClaim claim, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrEmpty(firebaseId))
+                AddNotification("FirebaseId", string.Format(Mensagens.CampoObrigatorio, "FirebaseId"));
+
+            if (IsInvalid())
+                return;
+
             try
             {
                 FirebaseApp.Create(new AppOptions()
                 {
-                    Credential = GoogleCredential.FromFile("path/to/serviceAccountKey.json"),
+                    Credential = GoogleCredential.FromFile("C:/firebase.json"),
                 });
 
                 var auth = FirebaseAuth.DefaultInstance;
-                var customClaims = new Dictionary<string, object>()
+
+                var newClaim = new Dictionary<string, object>()
                 {
-                    { "role", $"{user.Role}" }
+                    { claim.Key, $"{claim.Value}" }
                 };
 
-                await auth.SetCustomUserClaimsAsync(user.FirebaseId, customClaims, cancellationToken);
+                await auth.SetCustomUserClaimsAsync(firebaseId, newClaim, cancellationToken);
             }
             catch (Exception x)
             {
-                AddNotification("Role", x.Message);
+                AddNotification("AddClaim", x.Message);
+            }
+        }
+
+        private async Task RemoveCustomClaim(string firebaseId, string claimKey, CancellationToken cancellationToken)
+        {
+            AddNotifications(new Contract<Notification>()
+                .Requires()
+                .IsNotNullOrWhiteSpace(firebaseId, "FirebaseId", string.Format(Mensagens.CampoObrigatorio, "FirebaseId"))
+                .IsNotNullOrWhiteSpace(claimKey, "ClaimKey", string.Format(Mensagens.CampoObrigatorio, "ClaimKey")));
+
+            if (IsInvalid())
+                return;
+
+            try
+            {
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile("C:/firebase.json"),
+                });
+
+                var auth = FirebaseAuth.DefaultInstance;
+
+                var newClaim = new Dictionary<string, object>()
+                {
+                    { claimKey, null! }
+                };
+
+                await auth.SetCustomUserClaimsAsync(firebaseId, newClaim, cancellationToken);
+            }
+            catch (Exception x)
+            {
+                AddNotification("RemoveClaim", x.Message);
             }
         }
         #endregion
