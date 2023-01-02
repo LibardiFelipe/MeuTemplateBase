@@ -49,6 +49,7 @@ namespace TemplateBase.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllAsync([FromQuery] UserFilterRequest request)
         {
             var query = _mapper.Map<UserQuery>(request);
