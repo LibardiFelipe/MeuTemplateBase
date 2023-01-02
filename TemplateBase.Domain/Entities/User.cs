@@ -3,6 +3,7 @@ using FirebaseAdmin.Auth;
 using Flunt.Notifications;
 using Flunt.Validations;
 using Google.Apis.Auth.OAuth2;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -128,7 +129,7 @@ namespace TemplateBase.Domain.Entities
             {
                 FirebaseApp.Create(new AppOptions()
                 {
-                    Credential = GoogleCredential.FromFile("C:/firebase.json"),
+                    Credential = GoogleCredential.FromJson(JsonConvert.SerializeObject(new MyGoogleCredential())),
                 });
 
                 var auth = FirebaseAuth.DefaultInstance;
@@ -160,7 +161,7 @@ namespace TemplateBase.Domain.Entities
             {
                 FirebaseApp.Create(new AppOptions()
                 {
-                    Credential = GoogleCredential.FromFile("C:/firebase.json"),
+                    Credential = GoogleCredential.FromJson(JsonConvert.SerializeObject(new MyGoogleCredential())),
                 });
 
                 var auth = FirebaseAuth.DefaultInstance;
