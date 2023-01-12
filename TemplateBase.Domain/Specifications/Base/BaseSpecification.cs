@@ -20,40 +20,52 @@ namespace TemplateBase.Domain.Specifications.Base
         }
     }
 
-    public class BaseSpecification<TImplementation, TEntity> : ISpecification<TEntity> where TImplementation : BaseSpecification<TImplementation, TEntity> where TEntity : Entity
+    public class BaseSpecification<TImplementation, T> : ISpecification<T> where TImplementation : BaseSpecification<TImplementation, T> where T : Entity
     {
         protected BaseSpecification() { }
 
-        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria)
+        protected BaseSpecification(Expression<Func<T, bool>> criteria)
         {
             Criteria = criteria;
         }
 
-        public Expression<Func<TEntity, bool>> Criteria { get; private set; }
+        public Expression<Func<T, bool>> Criteria { get; private set; }
 
-        public List<Expression<Func<TEntity, object>>> Includes { get; private set; } = new List<Expression<Func<TEntity, object>>>();
+        public List<Expression<Func<T, object>>> Includes { get; private set; } = new List<Expression<Func<T, object>>>();
 
-        public Expression<Func<TEntity, object>> OrderByAscend { get; private set; }
+        public Expression<Func<T, object>> OrderByAscend { get; private set; }
 
-        public Expression<Func<TEntity, object>> OrderByDescend { get; private set; }
+        public Expression<Func<T, object>> OrderByDescend { get; private set; }
 
         public virtual TImplementation FilterById(Guid id)
         {
-            CriteriaAnd((TEntity x) => x.Id == id);
+            CriteriaAnd((T x) => x.Id == id);
             return (TImplementation)this;
         }
 
-        protected virtual TImplementation CriteriaAnd(Expression<Func<TEntity, bool>> criteria)
+        public virtual TImplementation FilterByCreationRange(DateTime start, DateTime end)
+        {
+            CriteriaAnd((T x) => x.CreatedAt.Date >= start.Date && x.CreatedAt.Date <= end.Date);
+            return (TImplementation)this;
+        }
+        
+        public virtual TImplementation FilterByUpdateRange(DateTime start, DateTime end)
+        {
+            CriteriaAnd((T x) =>  x.UpdatedAt.HasValue && (x.UpdatedAt.Value.Date >= start.Date && x.UpdatedAt.Value.Date <= end));
+            return (TImplementation)this;
+        }
+
+        protected virtual TImplementation CriteriaAnd(Expression<Func<T, bool>> criteria)
         {
             if (Criteria is not null)
             {
-                Expression<Func<TEntity, bool>> leftExpression = Criteria;
-                Expression<Func<TEntity, bool>> rightExpression = criteria;
+                Expression<Func<T, bool>> leftExpression = Criteria;
+                Expression<Func<T, bool>> rightExpression = criteria;
 
-                var paramExpr = Expression.Parameter(typeof(TEntity));
+                var paramExpr = Expression.Parameter(typeof(T));
                 var exprBody = Expression.AndAlso(leftExpression.Body, rightExpression.Body);
                 exprBody = (BinaryExpression)new ParameterReplacer(paramExpr).Visit(exprBody);
-                var finalExpr = Expression.Lambda<Func<TEntity, bool>>(exprBody, paramExpr);
+                var finalExpr = Expression.Lambda<Func<T, bool>>(exprBody, paramExpr);
 
                 Criteria = finalExpr;
             }
@@ -63,11 +75,11 @@ namespace TemplateBase.Domain.Specifications.Base
             return (TImplementation)this;
         }
 
-        protected virtual TImplementation CriteriaOr(Expression<Func<TEntity, bool>> criteria)
+        protected virtual TImplementation CriteriaOr(Expression<Func<T, bool>> criteria)
         {
             if (Criteria is not null)
             {
-                Criteria = Expression.Lambda<Func<TEntity, bool>>(Expression.OrElse(Criteria, criteria));
+                Criteria = Expression.Lambda<Func<T, bool>>(Expression.OrElse(Criteria, criteria));
             }
             else
                 Criteria = criteria;
@@ -75,19 +87,19 @@ namespace TemplateBase.Domain.Specifications.Base
             return (TImplementation)this;
         }
 
-        protected virtual TImplementation AddInclude(Expression<Func<TEntity, object>> includeCriteria)
+        protected virtual TImplementation AddInclude(Expression<Func<T, object>> includeCriteria)
         {
             Includes.Add(includeCriteria);
             return (TImplementation)this;
         }
 
-        protected virtual TImplementation OrderByAscending(Expression<Func<TEntity, object>> orderByCriteria)
+        protected virtual TImplementation OrderByAscending(Expression<Func<T, object>> orderByCriteria)
         {
             OrderByAscend = orderByCriteria;
             return (TImplementation)this;
         }
 
-        protected virtual TImplementation OrderByDescending(Expression<Func<TEntity, object>> orderByCriteria)
+        protected virtual TImplementation OrderByDescending(Expression<Func<T, object>> orderByCriteria)
         {
             OrderByDescend = orderByCriteria;
             return (TImplementation)this;

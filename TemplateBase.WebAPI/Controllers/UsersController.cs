@@ -3,17 +3,16 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using TemplateBase.Application.Commands.Auth;
-using TemplateBase.Application.Commands.Persons;
+using TemplateBase.Application.Commands.Users;
 using TemplateBase.Application.Queries.Users;
-using TemplateBase.WebAPI.Models.Requests.Persons;
 using TemplateBase.WebAPI.Models.Requests.Users;
 using TemplateBase.WebAPI.Models.ViewModels;
 
 namespace TemplateBase.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("v1/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -25,12 +24,11 @@ namespace TemplateBase.WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] FilterUserRequest request)
+        [HttpPost("setup")]
+        public async Task<IActionResult> SetupUserAsync()
         {
-            var query = _mapper.Map<UserQuery>(request);
-            var result = await _mediator.Send(query);
+            var command = new SetupUserCommand(User.Claims);
+            var result = await _mediator.Send(command);
             var response = _mapper.Map<ResultViewModel>(result);
 
             return response.Success
@@ -39,8 +37,7 @@ namespace TemplateBase.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetByIdAsync([FromRoute] string id)
+        public async Task<IActionResult> GetAsync([FromRoute] string id)
         {
             var query = new UserQuery(id);
             var result = await _mediator.Send(query);
@@ -51,25 +48,12 @@ namespace TemplateBase.WebAPI.Controllers
                 : BadRequest(response);
         }
 
-        [HttpPost("register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> RegisterUserAsync([FromForm] RegisterUserRequest request)
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllAsync([FromQuery] UserFilterRequest request)
         {
-            var command = _mapper.Map<RegisterUserCommand>(request);
-            var result = await _mediator.Send(command);
-            var response = _mapper.Map<ResultViewModel>(result);
-
-            return response.Success
-                ? Ok(response)
-                : BadRequest(response);
-        }
-
-        [HttpGet("verify")]
-        [AllowAnonymous]
-        public async Task<IActionResult> VerifyUserAsync([FromQuery] string hash)
-        {
-            var command = new VerifyUserCommand(hash);
-            var result = await _mediator.Send(command);
+            var query = _mapper.Map<UserQuery>(request);
+            var result = await _mediator.Send(query);
             var response = _mapper.Map<ResultViewModel>(result);
 
             return response.Success

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using TemplateBase.Application.Queries.TemplatesEmail;
 using TemplateBase.Application.Queries.Users;
-using TemplateBase.WebAPI.Models.Requests.Persons;
-using TemplateBase.WebAPI.Models.Requests.TemplatesEmail;
+using TemplateBase.WebAPI.Models.Requests.Users;
 
 namespace TemplateBase.WebAPI.AutoMapper
 {
@@ -10,21 +8,18 @@ namespace TemplateBase.WebAPI.AutoMapper
     {
         public RequestsToQueries()
         {
-            CreateMap<FilterUserRequest, UserQuery>()
+            CreateMap<UserFilterRequest, UserQuery>()
                 .ConstructUsing((src, ctx) =>
                 {
                     return new UserQuery()
                     .FilterByName(src.Name)
                     .FilterByEmail(src.Email)
-                    .FilterByType(src.Type)
-                    .FilterByBirthDate(src.BirthDate);
-                });
-
-            CreateMap<FilterTemplateEmailRequest, TemplateEmailQuery>()
-                .ConstructUsing((src, ctx) =>
-                {
-                    return new TemplateEmailQuery();
-                });
+                    .FilterByRole(src.Role)
+                    .FilterByCreationRange(src.CreatedAtStart, src.CreatedAtEnd)
+                    .FilterByUpdateRange(src.UpdatedAtStart, src.UpdatedAtEnd);
+                })
+                .IgnoreAllPropertiesWithAnInaccessibleSetter()
+                .AfterMap((_, src) => src.Validate());
         }
     }
 }

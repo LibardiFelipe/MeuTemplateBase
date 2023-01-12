@@ -1,10 +1,17 @@
-﻿using Flunt.Notifications;
+﻿using FirebaseAdmin;
+using FirebaseAdmin.Auth;
+using Flunt.Notifications;
 using Flunt.Validations;
+using Google.Apis.Auth.OAuth2;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using TemplateBase.Domain.Classes;
 using TemplateBase.Domain.Entities.Base;
 using TemplateBase.Domain.Enumerators;
 using TemplateBase.Domain.Resources;
-using TemplateBase.Domain.Utils;
 
 namespace TemplateBase.Domain.Entities
 {
@@ -17,93 +24,47 @@ namespace TemplateBase.Domain.Entities
     {
         #region Construtores
         public User() { }
-        public User(string name, string email, string password, string profilePictureUrl, DateTime birthDate, string id = null) : base(id)
+        public User(string firebaseId, string name, string email, string? profilePictureUrl, string? id = null) : base(id)
         {
-            // As propriedades já são passadas diretamente
-            // para os métodos que as validam.
-            // A propriedade id não necessita de uma validação aqui,
-            // pois ela já ocorre dentro da classe base "Entity".
+            SetFirebaseId(firebaseId);
             ChangeName(name, true);
             ChangeEmail(email, true);
-            ChangePassword(password, true);
             ChangeProfilePictureUrl(profilePictureUrl, true);
-            ChangeBirthDate(birthDate, true);
 
-            // Verificação por email necessária
-            ChangeIsVerified(false, true);
-            // Usuário sempre começa sendo o básico
-            ChangeType(EUserType.Basic, true);
-            ChangeIsLocked(false, true);
+            IsLocked = false;
+            Role = EUserRole.Customer;
         }
         #endregion
 
         #region Propriedades
+        public string FirebaseId { get; private set; }
         public string Name { get; private set; }
         public string Email { get; private set; }
-        public string Password { get; private set; }
-        public string ProfilePictureUrl { get; private set; }
-        public DateTime BirthDate { get; private set; }
-        public EUserType Type { get; private set; }
-        public bool IsVerified { get; private set; }
+        public string? ProfilePictureUrl { get; private set; }
+        public EUserRole Role { get; private set; }
         public bool IsLocked { get; private set; }
-        public string LockReason { get; private set; }
+        public string? LockReason { get; private set; }
         #endregion
 
         #region Validações
+        private void SetFirebaseId(string value)
+        {
+            FirebaseId = value;
+            AddNotifications(new Contract<Notification>()
+                .Requires()
+                .IsNotNullOrWhiteSpace(FirebaseId, "FirebaseId", string.Format(Mensagens.CampoObrigatorio, "FirebaseId")));
+        }
+
         public User ChangeName(string value, bool fromConstructor = false)
         {
-            // Caso a função seja chamada de fora do construtor,
-            // verifica se a propriedade que está sendo alterada é
-            // igual a nova que está chegando, se for, só retorna.
             if (!fromConstructor && (Name?.Equals(value) ?? false))
                 return this;
 
             Name = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNullOrWhiteSpace(Name, "Name", string.Format(DefaultMessages.CampoObrigatorio, "Nome")));
+                .IsNotNullOrWhiteSpace(Name, "Name", string.Format(Mensagens.CampoObrigatorio, "Nome")));
 
-            // Por padrão, o repositório só salva no banco entidades
-            // que tenham tido alguma alteração.
-            // Essa função é responsável por marcar a entidade com
-            // a flag que sinaliza que ela foi alterada.
-            FlagAsChanged();
-            return this;
-        }
-
-        public User ChangeIsVerified(bool value, bool fromConstructor = false)
-        {
-            if (!fromConstructor && IsVerified.Equals(value))
-                return this;
-
-            IsVerified = value;
-
-            FlagAsChanged();
-            return this;
-        }
-
-        public User ChangeIsLocked(bool value, bool fromConstructor = false)
-        {
-            if (!fromConstructor && IsLocked.Equals(value))
-                return this;
-
-            IsLocked = value;
-
-            FlagAsChanged();
-            return this;
-        }
-
-        public User ChangeLockReason(string value, bool fromConstructor = false)
-        {
-            if (!fromConstructor && (LockReason?.Equals(value) ?? false))
-                return this;
-
-            LockReason = value;
-            AddNotifications(new Contract<Notification>()
-                .Requires()
-                .IsNotNullOrWhiteSpace(LockReason, "LockReason", string.Format(DefaultMessages.CampoObrigatorio, "Motivo do Block")));
-
-            FlagAsChanged();
             return this;
         }
 
@@ -115,29 +76,12 @@ namespace TemplateBase.Domain.Entities
             Email = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsEmail(Email, "Email", string.Format(DefaultMessages.CampoInvalido, "Email")));
+                .IsEmail(Email, "Email", string.Format(Mensagens.CampoInvalido, "Email")));
 
-            FlagAsChanged();
             return this;
         }
 
-        public User ChangePassword(string value, bool fromConstructor = false)
-        {
-            if (!fromConstructor && (Password?.Equals(value) ?? false))
-                return this;
-
-            AddNotifications(new Contract<Notification>()
-                .Requires()
-                .IsNotNullOrWhiteSpace(value, "Password", string.Format(DefaultMessages.CampoObrigatorio, "Senha")));
-            // TODO: Adicionar verificação de segurança da senha
-
-            Password = Hasher.Hash(value);
-
-            FlagAsChanged();
-            return this;
-        }
-
-        public User ChangeProfilePictureUrl(string value, bool fromConstructor = false)
+        public User ChangeProfilePictureUrl(string? value, bool fromConstructor = false)
         {
             if (!fromConstructor && (ProfilePictureUrl?.Equals(value) ?? false))
                 return this;
@@ -145,38 +89,94 @@ namespace TemplateBase.Domain.Entities
             ProfilePictureUrl = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsUrlOrEmpty(ProfilePictureUrl, "ProfilePicture", string.Format(DefaultMessages.CampoInvalido, "Foto")));
+                .IsUrlOrEmpty(ProfilePictureUrl, "ProfilePicture", string.Format(Mensagens.CampoInvalido, "Foto")));
 
-            FlagAsChanged();
             return this;
         }
+        #endregion
 
-        public User ChangeType(EUserType value, bool fromConstructor = false)
+        #region Métodos públicos
+        public async Task ChangeRole(EUserRole value, CancellationToken cancellationToken)
         {
-            if (!fromConstructor && Type.Equals(value))
-                return this;
+            if (Role.Equals(value))
+                return;
 
-            Type = value;
+            Role = value;
+            var claim = new NewClaim("role", $"{Role}");
+            AddNotifications(claim);
+
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNull(Type, "Type", string.Format(DefaultMessages.CampoObrigatorio, "Permissão")));
+                .IsBetween((byte)Role, (byte)EUserRole.Customer, (byte)EUserRole.Admin, "Role", "A role adicionada não é válida!"));
 
-            FlagAsChanged();
-            return this;
+            if (IsInvalid())
+                return;
+
+            await SetCustomClaim(FirebaseId, claim, cancellationToken);
+        }
+        #endregion
+
+        #region Métodos privados
+        private async Task SetCustomClaim(string firebaseId, NewClaim claim, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(firebaseId))
+                AddNotification("FirebaseId", string.Format(Mensagens.CampoObrigatorio, "FirebaseId"));
+
+            if (IsInvalid())
+                return;
+
+            try
+            {
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromJson(JsonConvert.SerializeObject(new MyGoogleCredential())),
+                });
+
+                var auth = FirebaseAuth.DefaultInstance;
+
+                var newClaim = new Dictionary<string, object>()
+                {
+                    { claim.Key, $"{claim.Value}" }
+                };
+
+                await auth.SetCustomUserClaimsAsync(firebaseId, newClaim, cancellationToken);
+            }
+            catch (Exception x)
+            {
+                AddNotification("AddClaim", x.Message);
+            }
         }
 
-        public User ChangeBirthDate(DateTime value, bool fromConstructor = false)
+        private async Task RemoveCustomClaim(string firebaseId, string claimKey, CancellationToken cancellationToken)
         {
-            if (!fromConstructor && BirthDate.Equals(value))
-                return this;
-
-            BirthDate = value;
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsFalse(BirthDate == default, "BirthDate", string.Format(DefaultMessages.CampoObrigatorio, "Data de Nascimento")));
+                .IsNotNullOrWhiteSpace(firebaseId, "FirebaseId", string.Format(Mensagens.CampoObrigatorio, "FirebaseId"))
+                .IsNotNullOrWhiteSpace(claimKey, "ClaimKey", string.Format(Mensagens.CampoObrigatorio, "ClaimKey")));
 
-            FlagAsChanged();
-            return this;
+            if (IsInvalid())
+                return;
+
+            try
+            {
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromJson(JsonConvert.SerializeObject(new MyGoogleCredential())),
+                });
+
+                var auth = FirebaseAuth.DefaultInstance;
+
+                var newClaim = new Dictionary<string, object>()
+                {
+                    { claimKey, null! }
+                };
+
+                await auth.SetCustomUserClaimsAsync(firebaseId, newClaim, cancellationToken);
+            }
+            catch (Exception x)
+            {
+                AddNotification("RemoveClaim", x.Message);
+            }
         }
         #endregion
     }

@@ -22,14 +22,14 @@ namespace TemplateBase.Domain.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DefaultMessages {
+    public class Mensagens {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DefaultMessages() {
+        internal Mensagens() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace TemplateBase.Domain.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TemplateBase.Domain.Resources.DefaultMessages", typeof(DefaultMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TemplateBase.Domain.Resources.Mensagens", typeof(Mensagens).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -75,33 +75,6 @@ namespace TemplateBase.Domain.Resources {
         public static string CampoObrigatorio {
             get {
                 return ResourceManager.GetString("CampoObrigatorio", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a É necessário confirmar o seu email antes de se contectar..
-        /// </summary>
-        public static string ConfirmacaoEmailPendente {
-            get {
-                return ResourceManager.GetString("ConfirmacaoEmailPendente", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O email informado já se encontra cadastrado..
-        /// </summary>
-        public static string EmailJaExistente {
-            get {
-                return ResourceManager.GetString("EmailJaExistente", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Email e/ou senha incorreto(s)!.
-        /// </summary>
-        public static string EmailOuSenhaIncorretos {
-            get {
-                return ResourceManager.GetString("EmailOuSenhaIncorretos", resourceCulture);
             }
         }
         

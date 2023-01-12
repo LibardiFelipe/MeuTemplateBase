@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using TemplateBase.Application.Queries.Base;
 using TemplateBase.Domain.Contracts;
 using TemplateBase.Domain.Entities;
@@ -7,13 +7,12 @@ using TemplateBase.Domain.Specifications;
 
 namespace TemplateBase.Application.Queries.Users
 {
-    public class UserQuery : Query<User>
+    public class UserQuery : Query<UserQuery, User>
     {
         #region Membros privados
-        private string _name;
-        private string _email;
-        private EUserType? _type = null;
-        private DateTime? _birthDate = null;
+        private string? _name = null;
+        private string? _email = null;
+        private EUserRole? _role = null;
         #endregion
 
         #region Construtores
@@ -22,27 +21,21 @@ namespace TemplateBase.Application.Queries.Users
         #endregion
 
         #region Filtros
-        public UserQuery FilterByName(string value)
+        public UserQuery FilterByName(string? value)
         {
             _name = value;
             return this;
         }
 
-        public UserQuery FilterByEmail(string value)
+        public UserQuery FilterByEmail(string? value)
         {
             _email = value;
             return this;
         }
 
-        public UserQuery FilterByType(EUserType? value)
+        public UserQuery FilterByRole(EUserRole? value)
         {
-            _type = value;
-            return this;
-        }
-
-        public UserQuery FilterByBirthDate(DateTime? value)
-        {
-            _birthDate = value;
+            _role = value;
             return this;
         }
         #endregion
@@ -55,17 +48,20 @@ namespace TemplateBase.Application.Queries.Users
             if (_id.HasValue)
                 spec.FilterById(_id.Value);
 
+            if (_createdAtStart.HasValue && _createdAtEnd.HasValue)
+                spec.FilterByCreationRange(_createdAtStart.Value, _createdAtEnd.Value);
+
+            if (_updatedAtStart.HasValue && _updatedAtEnd.HasValue)
+                spec.FilterByUpdateRange(_updatedAtStart.Value, _updatedAtEnd.Value);
+
             if (!string.IsNullOrWhiteSpace(_name))
                 spec.FilterByName(_name);
 
             if (!string.IsNullOrWhiteSpace(_email))
                 spec.FilterByEmail(_email);
 
-            if (_type.HasValue)
-                spec.FilterByType(_type.Value);
-
-            if (_birthDate.HasValue)
-                spec.FilterByBirthDate(_birthDate.Value);
+            if (_role.HasValue)
+                spec.FilterByRole(_role.Value);
 
             return spec;
         }
@@ -74,11 +70,7 @@ namespace TemplateBase.Application.Queries.Users
         #region Validações
         public override void Validate()
         {
-            /* 
-             * Caso queira trabalhar com failfast validations,
-             * aqui dentro é o local onde essas validações
-             * deverão ser feitas.
-            */
+            
         }
         #endregion
     }

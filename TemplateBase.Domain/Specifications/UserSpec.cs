@@ -23,15 +23,9 @@ namespace TemplateBase.Domain.Specifications
             return this;
         }
 
-        public UserSpec FilterByType(EUserType value)
+        public UserSpec FilterByRole(EUserRole value)
         {
-            CriteriaAnd(x => x.Type == value);
-            return this;
-        }
-
-        public UserSpec FilterByBirthDate(DateTime value)
-        {
-            CriteriaAnd(x => x.BirthDate == value.Date);
+            CriteriaAnd(x => x.Role == value);
             return this;
         }
 

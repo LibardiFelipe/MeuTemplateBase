@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace TemplateBase.Domain.Services.Contracts
 {
-    public interface IStorageService
+    public interface IStorageService : IService
     {
-        Task<string> UploadImage(IFormFile formFile, CancellationToken cancellationToken);
+        Task<string> UploadFile(IFormFile formFile, string[] allowedExtensions, CancellationToken cancellationToken);
     }
 }

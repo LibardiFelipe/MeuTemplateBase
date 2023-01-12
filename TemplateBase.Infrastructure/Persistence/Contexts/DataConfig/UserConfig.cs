@@ -8,7 +8,7 @@ namespace TemplateBase.Infrastructure.Persistence.Contexts.DataConfig
     {
         public override void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("User");
+            builder.ToTable("Users");
         }
     }
 }
